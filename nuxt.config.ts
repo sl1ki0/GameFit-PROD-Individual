@@ -10,5 +10,11 @@ export default defineNuxtConfig({
   },
   app: {
     baseURL: '/'
+  },
+  modules: ['nuxt3-localforage', '@nuxtjs/tailwindcss'],
+  vite: {
+    optimizeDeps: {
+      include: ['localforage'],
+    },
   }
 })
