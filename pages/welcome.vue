@@ -1,29 +1,29 @@
 <template>
     <div
-        class="min-h-screen bg-gradient-to-br from-black to-green-900 flex flex-col items-center justify-center text-white relative overflow-hidden">
+        class="relative flex flex-col justify-center items-center bg-gradient-to-br from-black to-green-900 min-h-screen overflow-hidden text-white">
 
         <Hexagon size="sm" speed="slow" />
         <Hexagon size="[90vw]" height="[90vh]" speed="slow" />
         <Hexagon size="1/2" speed="fast" dash-pattern="10"/>
 
         <img src="/assets/dumbell.png" alt="Изображение гантели на фоне"
-            class="absolute top-0 left-0 w-1/5 dumbellRotated25 z-10 fade-in" />
+            class="top-0 left-0 z-10 absolute w-1/5 dumbellRotated25 fade-in" />
 
         <img src="/assets/dumbell.png" alt="Изображение гантели на фоне"
-            class="absolute top-[35vh] right-[10vw] w-1/5 dumbellRotated45 z-10 fade-in" />
+            class="top-[35vh] right-[10vw] z-10 absolute w-1/5 dumbellRotated45 fade-in" />
 
         <img src="/assets/dumbell.png" alt="Изображение гантели на фоне"
-            class="absolute bottom-[15vh] left-[20vw] w-1/5 dumbellRotated45 z-10 fade-in" />
+            class="bottom-[15vh] left-[20vw] z-10 absolute w-1/5 dumbellRotated45 fade-in" />
 
-        <div class="absolute inset-0 bg-cover bg-center z-0 opacity-10"
+        <div class="z-0 absolute inset-0 bg-cover bg-center opacity-10"
             style="background-image: url('/placeholder.svg?height=1080&width=1920')"></div>
         <div class="z-10 fade-in">
-            <article class="text-center mb-12">
-                <h1 class="text-4xl md:text-6xl font-bold mb-4">Nuxt Fitness</h1>
-                <p class="text-xl md:text-2xl text-gray-300">Your Ultimate Fitness Companion</p>
+            <article class="mb-12 text-center">
+                <h1 class="mb-4 font-bold text-4xl md:text-6xl">Nuxt Fitness</h1>
+                <p class="text-gray-300 text-xl md:text-2xl">Your Ultimate Fitness Companion</p>
             </article>
             <div class="text-center">
-                <Button @click="handleClick()" label="Get Started" class="p-button-rounded p-button-lg custom-button"
+                <Button @click="handleClick()" label="Get Started" class="custom-button p-button-lg p-button-rounded"
                     aria-label="Get started with FitTrack Pro" />
             </div>
         </div>
