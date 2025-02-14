@@ -39,7 +39,7 @@ const hexagonPoints = angles
     </svg>
 </template>
 
-<style>
+<style scoped>
 .animate-spin-slow {
     animation: spinSlow 120s linear infinite;
     position: absolute;
