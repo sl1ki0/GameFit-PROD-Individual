@@ -1,12 +1,9 @@
 export default defineNuxtRouteMiddleware((to) => {
-      const firstVisit: String | null = localStorage.getItem("firstVisit");
+      const isVisited: String | null = localStorage.getItem("isVisited");
 
-      if (!firstVisit && to.path === '/welcome') {
-        localStorage.setItem("firstVisit", "visited");
-        return
-      } else if (!firstVisit) {
-        localStorage.setItem("firstVisit", "visited");
+      if (!isVisited && !(to.path.toLowerCase() === '/welcome' || to.path.toLowerCase() === '/createuser')) {
         return navigateTo("/welcome");
+      } else if (isVisited && (to.path.toLowerCase() === '/welcome' || to.path.toLowerCase() === '/createuser')) {
+        return navigateTo('/')
       }
-
   });
