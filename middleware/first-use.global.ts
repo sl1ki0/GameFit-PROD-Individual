@@ -4,6 +4,6 @@ export default defineNuxtRouteMiddleware((to) => {
   if (!isVisited && !(to.path.toLowerCase() === '/welcome' || to.path.toLowerCase() === '/createuser')) {
     return navigateTo("/welcome");
   } else if (isVisited && (to.path.toLowerCase() === '/welcome' || to.path.toLowerCase() === '/createuser')) {
-    return navigateTo('/')
+    return navigateTo('/dashboard')
   }
 });

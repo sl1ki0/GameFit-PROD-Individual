@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { z } from 'zod';
-import type FirstFromSubmitArgs from '~/types/start/firstForm';
-import type SecondFromSubmitArgs from '~/types/start/secondForm';
+import type FirstFormSubmitArgs from '~/types/createUser/firstFormSubmitArgs';
+import type SecondFormSubmitArgs from '~/types/createUser/SecondFormSubmitArgs';
+import userDataStorage from '~/storage/userData';
+import type { FirstFormValues, SecondFormValues, UserData } from '~/types/createUser/UserDataTypes';
+import { useToast } from 'primevue/usetoast';
 
-const currStep = ref(1);
 
-const firstFormValues = ref({
+const firstFormValues = ref<FirstFormValues>({
     username: '',
     gender: ''
 });
@@ -20,38 +21,61 @@ const firstStepSchema = z.object({
 const firstStepResolver = ref(zodResolver(firstStepSchema));
 
 
-const secondFormValues = ref<{ weight: number | null; height: number | null; sportActivity: string }>({
+const secondFormValues = ref<SecondFormValues>({
     weight: null,
     height: null,
-    sportActivity: ''
+    sportActivity: null
 });
 
 
 const secondStepSchema = z.object({
     weight: z.coerce.number().min(1, { message: 'Обязательно заполните вес' }),
     height: z.coerce.number().min(1, { message: 'Обязательно заполните рост' }),
-    sportActivity: z.string().min(1, { message: 'Обязательно' }),
+    sportActivity: z.coerce.number().min(1, { message: 'Обязательно' }),
 });
 
 const secondStepResolver = ref(zodResolver(secondStepSchema));
 
-const nextStep = (data: FirstFromSubmitArgs, activateCallback: (step: string) => void): void => {
+const nextStep = (data: FirstFormSubmitArgs, activateCallback: (step: string) => void): void => {
     if (data.valid) {
         firstFormValues.value = data.values
         activateCallback('2');
     }
 };
 
-const finishForm = (data: SecondFromSubmitArgs) => {
-    if (data.valid) {
-        secondFormValues.value = data.values;
-        console.log(firstFormValues.value);
-        console.log(secondFormValues.value);
-    }
+const toast = useToast();
+
+const finishForm = async (data: SecondFormSubmitArgs): Promise<void> => {
+  if (!data.valid) return;
+
+  secondFormValues.value = data.values;
+
+  try {
+    await userDataStorage.setItem('user', {
+      username: firstFormValues.value.username,
+      gender: firstFormValues.value.gender,
+      weight: secondFormValues.value.weight,
+      height: secondFormValues.value.height,
+      sportActivity: secondFormValues.value.sportActivity,
+    });
+
+    localStorage.setItem('isVisited', 'true');
+    navigateTo('/dashboard');
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    toast.add({
+      severity: 'error',
+      summary: 'Произошла ошибка',
+      detail: errorMessage,
+      life: 3500,
+    });
+  }
 };
+
 </script>
 
 <template>
+    <Toast />
     <div class="card flex justify-center">
         <Stepper value="1" linear class="basis-[50rem]">
             <StepList>
@@ -63,7 +87,7 @@ const finishForm = (data: SecondFromSubmitArgs) => {
                 <StepPanel v-slot="{ activateCallback }" value="1" class="flex flex-col justify-center items-center">
                     <div class="flex flex-col h-48">
                         <Form v-slot="$form" :initialValues="firstFormValues" :resolver="firstStepResolver"
-                            @submit="(data: FirstFromSubmitArgs) => nextStep(data, activateCallback)"
+                            @submit="(data: FirstFormSubmitArgs) => nextStep(data, activateCallback)"
                             class="flex flex-col gap-8 w-full sm:w-56">
                             <div class="flex flex-col gap-1">
                                 <label for="username" class="font-semibold text-lg">Укажите имя</label>
@@ -99,7 +123,7 @@ const finishForm = (data: SecondFromSubmitArgs) => {
                 <StepPanel v-slot="{ activateCallback }" value="2" class="flex flex-col justify-center items-center">
                     <div class="flex flex-col h-48">
                         <Form v-slot="$form" :initialValues="secondFormValues" :resolver="secondStepResolver"
-                            @submit="(data: SecondFromSubmitArgs) => finishForm(data)"
+                            @submit="(data: SecondFormSubmitArgs) => finishForm(data)"
                             class="flex flex-col gap-8 w-full sm:w-full">
                             <div class="flex flex-col gap-1">
                                 <label for="weight" class="font-semibold text-lg">Укажите ваш вес</label>
