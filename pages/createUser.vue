@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { z } from 'zod';
-import type FirstFormSubmitArgs from '~/types/createUser/firstFormSubmitArgs';
+import type FirstFormSubmitArgs from '~/types/createUser/FirstFormSubmitArgs';
 import type SecondFormSubmitArgs from '~/types/createUser/SecondFormSubmitArgs';
 import userDataStorage from '~/storage/userData';
 import type { FirstFormValues, SecondFormValues, UserData } from '~/types/createUser/UserDataTypes';
@@ -46,30 +46,30 @@ const nextStep = (data: FirstFormSubmitArgs, activateCallback: (step: string) =>
 const toast = useToast();
 
 const finishForm = async (data: SecondFormSubmitArgs): Promise<void> => {
-  if (!data.valid) return;
+    if (!data.valid) return;
 
-  secondFormValues.value = data.values;
+    secondFormValues.value = data.values;
 
-  try {
-    await userDataStorage.setItem('user', {
-      username: firstFormValues.value.username,
-      gender: firstFormValues.value.gender,
-      weight: secondFormValues.value.weight,
-      height: secondFormValues.value.height,
-      sportActivity: secondFormValues.value.sportActivity,
-    });
+    try {
+        await userDataStorage.setItem('user', {
+            username: firstFormValues.value.username,
+            gender: firstFormValues.value.gender,
+            weight: secondFormValues.value.weight,
+            height: secondFormValues.value.height,
+            sportActivity: secondFormValues.value.sportActivity,
+        });
 
-    localStorage.setItem('isVisited', 'true');
-    navigateTo('/dashboard');
-  } catch (err: unknown) {
-    const errorMessage = err instanceof Error ? err.message : String(err);
-    toast.add({
-      severity: 'error',
-      summary: 'Произошла ошибка',
-      detail: errorMessage,
-      life: 3500,
-    });
-  }
+        localStorage.setItem('isVisited', 'true');
+        navigateTo('/dashboard');
+    } catch (err: unknown) {
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        toast.add({
+            severity: 'error',
+            summary: 'Произошла ошибка',
+            detail: errorMessage,
+            life: 3500,
+        });
+    }
 };
 
 </script>
