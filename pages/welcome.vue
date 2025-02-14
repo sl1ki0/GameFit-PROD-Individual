@@ -35,7 +35,7 @@ import Hexagon from './components/geometry/Hexagon.vue';
 import { APP_NAME } from '~/constants/branding';
 
 const handleClick = () => {
-    console.log('clicked')
+    return navigateTo('/createuser')
 }
 </script>
 
