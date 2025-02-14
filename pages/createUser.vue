@@ -44,12 +44,13 @@ const nextStep = (data: FirstFormSubmitArgs, activateCallback: (step: string) =>
 };
 
 const toast = useToast();
+const isLoading = ref(false)
 
 const finishForm = async (data: SecondFormSubmitArgs): Promise<void> => {
     if (!data.valid) return;
 
     secondFormValues.value = data.values;
-
+    isLoading.value = true
     try {
         await userDataStorage.setItem('user', {
             username: firstFormValues.value.username,
@@ -58,9 +59,6 @@ const finishForm = async (data: SecondFormSubmitArgs): Promise<void> => {
             height: secondFormValues.value.height,
             sportActivity: secondFormValues.value.sportActivity,
         });
-
-        localStorage.setItem('isVisited', 'true');
-        navigateTo('/dashboard');
     } catch (err: unknown) {
         const errorMessage = err instanceof Error ? err.message : String(err);
         toast.add({
@@ -69,6 +67,10 @@ const finishForm = async (data: SecondFormSubmitArgs): Promise<void> => {
             detail: errorMessage,
             life: 3500,
         });
+    } finally {
+        isLoading.value = false;
+        localStorage.setItem('isVisited', 'true');
+        navigateTo('/dashboard');
     }
 };
 
@@ -176,6 +178,12 @@ const finishForm = async (data: SecondFormSubmitArgs): Promise<void> => {
                 </StepPanel>
             </StepPanels>
         </Stepper>
+    </div>
+    <div
+      v-if="isLoading"
+      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+    >
+        <ProgressSpinner aria-label="Loading" />
     </div>
 </template>
 
