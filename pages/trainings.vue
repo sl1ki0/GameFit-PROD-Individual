@@ -1,0 +1,3 @@
+<template>
+    Тренировки
+</template>

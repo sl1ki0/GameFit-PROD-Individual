@@ -30,13 +30,17 @@
     </div>
 </template>
 
-<script setup>
-import Hexagon from './components/geometry/Hexagon.vue';
+<script setup lang="ts">
+import Hexagon from '~/components/geometry/Hexagon.vue';
 import { APP_NAME } from '~/constants/branding';
+
+definePageMeta({
+    layout: false
+});
 
 const handleClick = () => {
     return navigateTo('/createuser')
-}
+};
 </script>
 
 <style>

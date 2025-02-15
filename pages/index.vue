@@ -1,3 +1,3 @@
 <template>
-    <div>Coming soon....</div>
+    <div>Расписание + Стата</div>
 </template>

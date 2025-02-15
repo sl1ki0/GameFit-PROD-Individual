@@ -7,6 +7,9 @@ import userDataStorage from '~/storage/userData';
 import type { FirstFormValues, SecondFormValues, UserData } from '~/types/createUser/UserDataTypes';
 import { useToast } from 'primevue/usetoast';
 
+definePageMeta({
+    layout: false
+});
 
 const firstFormValues = ref<FirstFormValues>({
     username: '',
@@ -70,7 +73,7 @@ const finishForm = async (data: SecondFormSubmitArgs): Promise<void> => {
     } finally {
         isLoading.value = false;
         localStorage.setItem('isVisited', 'true');
-        navigateTo('/dashboard');
+        navigateTo('/');
     }
 };
 
