@@ -26,50 +26,64 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { ref, computed } from 'vue';
 import { DIFFICULTIES, MUSCLEGROUPS } from '~/constants/exerciseConstants';
+import type Exercise from '~/types/trainings/ExerciseType';
+import type { FilterOption,  ExerciseEvent} from '~/types/trainings/ExercisesFilterTypes';
 
-
-const exercises = ref([
-    { id:'dfndnfd', name: 'Приседания', difficulty: 'Легкий', muscleGroup: 'Ноги', item: 'Нет' },
-
+const exercises = ref<Exercise[]>([
+  {
+    id: 'dfndnfd',
+    name: 'Приседания',
+    difficulty: 'Легкий',
+    muscleGroup: 'Ноги',  
+    item: 'Нет',
+    instruction: '',
+    usedIn: [],
+  },
 ]);
 
-const items = ref([
-    { name: 'Нет', value: 'Нет' },
-    { name: 'Гантеля', value: 'Гантеля' },
-    { name: 'Штанга', value: 'Штанга' },
-    { name: 'Скакалка', value: 'Скакалка' },
+const items = ref<FilterOption[]>([
+  { name: 'Нет', value: 'Нет' },
+  { name: 'Гантеля', value: 'Гантеля' },
+  { name: 'Штанга', value: 'Штанга' },
+  { name: 'Скакалка', value: 'Скакалка' },
 ]);
 
-const selectedDifficulty = ref(null);
-const selectedMuscleGroup = ref(null);
-const selectedItem = ref(null);
+const selectedDifficulty = ref<FilterOption | null>(null);
+const selectedMuscleGroup = ref<FilterOption | null>(null);
+const selectedItem = ref<FilterOption | null>(null);
 
-const filteredExercises = computed(() => {
-    let filtered = exercises.value;
-    if (selectedDifficulty.value) {
-        filtered = filtered.filter(exercise => exercise.difficulty === selectedDifficulty.value.value);
-    }
-    if (selectedMuscleGroup.value) {
-        filtered = filtered.filter(exercise => exercise.muscleGroup === selectedMuscleGroup.value.value);
-    }
-    if (selectedItem.value) {
-        filtered = filtered.filter(exercise => exercise.item === selectedItem.value.value);
-    }
-    return filtered;
+const filteredExercises = computed<Exercise[]>(() => {
+  let filtered = exercises.value;
+
+  if (selectedDifficulty.value) {
+    const difficultyValue = selectedDifficulty.value.value;
+    filtered = filtered.filter((exercise) => exercise.difficulty === difficultyValue);
+  }
+  if (selectedMuscleGroup.value) {
+    const muscleGroupValue = selectedMuscleGroup.value.value;
+    filtered = filtered.filter(exercise => exercise.muscleGroup === muscleGroupValue);
+  }
+  if (selectedItem.value) {
+    const itemValue = selectedItem.value.value;
+    filtered = filtered.filter(exercise => exercise.item === itemValue);
+  }
+  return filtered;
 });
 
-const clearFilters = () => {
-    selectedDifficulty.value = null;
-    selectedMuscleGroup.value = null;
-    selectedItem.value = null;
+const clearFilters = (): void => {
+  selectedDifficulty.value = null;
+  selectedMuscleGroup.value = null;
+  selectedItem.value = null;
 };
 
-const openExercisePage = (event) => {
-    return navigateTo(`/exercises/${event.data.id}`)
-}
+const openExercisePage = (event: ExerciseEvent): ReturnType<typeof navigateTo> => {
+  return navigateTo(`/exercises/${event.data.id}`);
+};
 </script>
+
 
 <style>
 .p-datatable-tbody > tr:hover{
