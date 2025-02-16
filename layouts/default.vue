@@ -40,14 +40,14 @@ const items = ref([
         label: 'Тренировки',
         icon: 'pi pi-wave-pulse',
         command: () => {
-            return navigateTo('/trainings')
+            return navigateTo('/training/list')
         }
     },
     {
         label: 'Каталог упражнений',
         icon: 'pi pi-book',
         command: () => {
-            return navigateTo('/exercises')
+            return navigateTo('/exercise/list')
         }
     }
 ]);
