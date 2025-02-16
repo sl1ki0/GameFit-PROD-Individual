@@ -17,8 +17,7 @@ export default defineNuxtConfig({
   vite: {
     optimizeDeps: {
       include: ['localforage'],
-    },
-    
+    },   
   },
   css: [
     'primeicons/primeicons.css', // Add this line
