@@ -9,7 +9,7 @@
             <Dropdown v-model="selectedItem" :options="items" optionLabel="name" placeholder="Select Item"
                 class="w-full md:w-auto" />
             <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
-                <Button label="Add Exercise" icon="pi pi-plus" class="p-button-success w-full md:w-auto" />
+                <Button label="Add Exercise" icon="pi pi-plus" class="p-button-success w-full md:w-auto" @click="openAddExercisePage"/>
                 <Button label="Clear Filters" icon="pi pi-filter-slash" class="p-button-danger w-full md:w-auto"
                     @click="clearFilters" />
             </div>
@@ -21,7 +21,7 @@
             <Column field="name" header="Название"></Column>
             <Column field="difficulty" header="Сложность"></Column>
             <Column field="muscleGroup" header="Часть тела"></Column>
-            <Column field="item" header="Экипировка"></Column>
+            <Column field="items" header="Экипировка"></Column>
         </DataTable>
     </div>
 </template>
@@ -38,7 +38,7 @@ const exercises = ref<Exercise[]>([
     name: 'Приседания',
     difficulty: 'Легкий',
     muscleGroup: 'Ноги',  
-    item: 'Нет',
+    items: ['Нет'],
     instruction: '',
     usedIn: [],
   },
@@ -68,7 +68,7 @@ const filteredExercises = computed<Exercise[]>(() => {
   }
   if (selectedItem.value) {
     const itemValue = selectedItem.value.value;
-    filtered = filtered.filter(exercise => exercise.item === itemValue);
+    filtered = filtered.filter(exercise => exercise.items.includes(itemValue));
   }
   return filtered;
 });
@@ -82,6 +82,10 @@ const clearFilters = (): void => {
 const openExercisePage = (event: ExerciseEvent): ReturnType<typeof navigateTo> => {
   return navigateTo(`/exercises/${event.data.id}`);
 };
+
+const openAddExercisePage = () => {
+    return navigateTo('/exercise/add');
+}
 </script>
 
 

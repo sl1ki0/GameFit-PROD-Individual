@@ -3,8 +3,8 @@ export default interface Exercise {
     name: string;
     difficulty: "Легкий" | "Средний" | "Высокий";
     muscleGroup: "Грудь" | "Руки" | "Спина" | "Ноги" | "Общее";
-    item: string;
+    items: string[];
     instruction: string;
-    images?: string[];
-    usedIn: string[]
+    media?: string[];
+    usedIn: string[] | null
 }
