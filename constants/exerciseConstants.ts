@@ -90,3 +90,22 @@ export const SPORT_EQUIPMENT = [
         value: "Колесо для йоги"
     }
 ];
+
+export const METRICS = [
+    {
+        name: "Вес (кг)",
+        value: "Вес (кг)"
+    },
+    {
+        name: "Число повторений",
+        value: "Число повторений"
+    },
+    {
+        name: "Время (сек)",
+        value: "Время (сек)"
+    },
+    {
+        name: "Дистанция (м)",
+        value: "Дистанция (м)"
+    }
+]

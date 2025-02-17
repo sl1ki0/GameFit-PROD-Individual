@@ -1,12 +1,12 @@
 import localForage from 'localforage';
 
-const userDataStorage = localForage.createInstance({
+const exerciseDataStorage = localForage.createInstance({
     driver: [
         localForage.INDEXEDDB,
         localForage.LOCALSTORAGE,
         localForage.WEBSQL,
     ],
-    name: 'IndexedDB-userData',
+    name: 'IndexedDB-exerciseDara',
 });
 
-export default userDataStorage;
+export default exerciseDataStorage;

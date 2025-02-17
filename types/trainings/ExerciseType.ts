@@ -6,5 +6,6 @@ export default interface Exercise {
     items: string[];
     instruction: string;
     media?: string[];
-    usedIn: string[] | null
+    usedIn: string[] | null;
+    metric: "Вес (кг)" | "Число повторений" | "Время (сек)" | "Дистанция (м)";
 }
