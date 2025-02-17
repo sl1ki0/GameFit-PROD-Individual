@@ -1,4 +1,5 @@
 <template>
+  <Toast />
   <div class="p-4">
     <h1 class="text-3xl font-bold mb-4">Каталог упражнений</h1>
     <div class="mb-4 space-y-4 md:space-y-0 md:flex md:space-x-4">
@@ -27,10 +28,14 @@
           {{ formatItems(slotProps.data.items) }}
         </template>
       </Column>
+      <Column header="Удалить">
+        <template #body="slotProps">
+          <Button icon="pi pi-trash" class="p-button-danger p-button-rounded p-button-text"
+            @click="handleDeletion(slotProps.data.id, slotProps.data.usedIn)" />
+        </template>
+      </Column>
     </DataTable>
   </div>
-
-  <Loading :is-loading="isLoading"></Loading>
 </template>
 
 <script setup lang="ts">
@@ -39,8 +44,25 @@ import { DIFFICULTIES, MUSCLEGROUPS, SPORT_EQUIPMENT } from '~/constants/exercis
 import type Exercise from '~/types/trainings/ExerciseType';
 import type { FilterOption, ExerciseEvent } from '~/types/trainings/ExercisesFilterTypes';
 import { formatItems } from '#imports';
+import deleteExercise from '~/utils/deleteExcercise';
+import { useToast } from "#imports";
 
+const toast = useToast();
 const { exercises, isLoading, loadExercises } = useExercises();
+
+const handleDeletion = (id: string, usedIn: Array<string> | null) => {
+  if (!usedIn){
+    deleteExercise(id, toast);
+    loadExercises();
+  } else{
+    toast.add({
+            severity: 'error',
+            summary: 'Произошла ошибка',
+            detail: 'Это упражнение используется в тренировке',
+            life: 2500,
+        })
+  }
+}
 
 const selectedDifficulty = ref<FilterOption | null>(null);
 const selectedMuscleGroup = ref<FilterOption | null>(null);
