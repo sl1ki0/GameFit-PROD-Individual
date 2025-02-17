@@ -25,7 +25,7 @@ const initialValues = ref({
 
 const resolver = zodResolver(formSchema);
 
-const isLoading = ref<Boolean>(false)
+const isLoading = ref<boolean>(false);
 
 const handleSubmit = async (data: ExerciseFromSubmitArgs) => {
     if (!data.valid) return;

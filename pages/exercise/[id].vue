@@ -1,3 +1,3 @@
 <template>
-    id ex
+   testiki exercisiki
 </template>

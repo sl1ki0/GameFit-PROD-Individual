@@ -6,7 +6,7 @@
                 placeholder="Select Difficulty" class="w-full md:w-auto" />
             <Dropdown v-model="selectedMuscleGroup" :options="MUSCLEGROUPS" optionLabel="name"
                 placeholder="Select Muscle Group" class="w-full md:w-auto" />
-            <Dropdown v-model="selectedItem" :options="items" optionLabel="name" placeholder="Select Item"
+            <Dropdown v-model="selectedItem" :options="SPORT_EQUIPMENT" optionLabel="name" placeholder="Select Item"
                 class="w-full md:w-auto" />
             <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
                 <Button label="Add Exercise" icon="pi pi-plus" class="p-button-success w-full md:w-auto" @click="openAddExercisePage"/>
@@ -24,32 +24,17 @@
             <Column field="items" header="Экипировка"></Column>
         </DataTable>
     </div>
+
+    <Loading :is-loading="isLoading"></Loading>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { DIFFICULTIES, MUSCLEGROUPS } from '~/constants/exerciseConstants';
+import { DIFFICULTIES, MUSCLEGROUPS, SPORT_EQUIPMENT } from '~/constants/exerciseConstants';
 import type Exercise from '~/types/trainings/ExerciseType';
 import type { FilterOption,  ExerciseEvent} from '~/types/trainings/ExercisesFilterTypes';
 
-const exercises = ref<Exercise[]>([
-  {
-    id: 'dfndnfd',
-    name: 'Приседания',
-    difficulty: 'Легкий',
-    muscleGroup: 'Ноги',  
-    items: ['Нет'],
-    instruction: '',
-    usedIn: [],
-  },
-]);
-
-const items = ref<FilterOption[]>([
-  { name: 'Нет', value: 'Нет' },
-  { name: 'Гантеля', value: 'Гантеля' },
-  { name: 'Штанга', value: 'Штанга' },
-  { name: 'Скакалка', value: 'Скакалка' },
-]);
+const { exercises , isLoading, loadExercises } = useExercises();
 
 const selectedDifficulty = ref<FilterOption | null>(null);
 const selectedMuscleGroup = ref<FilterOption | null>(null);
@@ -60,15 +45,15 @@ const filteredExercises = computed<Exercise[]>(() => {
 
   if (selectedDifficulty.value) {
     const difficultyValue = selectedDifficulty.value.value;
-    filtered = filtered.filter((exercise) => exercise.difficulty === difficultyValue);
+    filtered = filtered.filter((exercise: Exercise) => exercise.difficulty === difficultyValue);
   }
   if (selectedMuscleGroup.value) {
     const muscleGroupValue = selectedMuscleGroup.value.value;
-    filtered = filtered.filter(exercise => exercise.muscleGroup === muscleGroupValue);
+    filtered = filtered.filter((exercise: Exercise) => exercise.muscleGroup === muscleGroupValue);
   }
   if (selectedItem.value) {
     const itemValue = selectedItem.value.value;
-    filtered = filtered.filter(exercise => exercise.items.includes(itemValue));
+    filtered = filtered.filter((exercise: Exercise) => exercise.items.includes(itemValue));
   }
   return filtered;
 });
@@ -80,7 +65,7 @@ const clearFilters = (): void => {
 };
 
 const openExercisePage = (event: ExerciseEvent): ReturnType<typeof navigateTo> => {
-  return navigateTo(`/exercises/${event.data.id}`);
+  return navigateTo(`/exercise/${event.data.id}`);
 };
 
 const openAddExercisePage = () => {
