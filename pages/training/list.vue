@@ -17,7 +17,7 @@
     <div v-if="trainings.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <TrainingCard v-for="training in filteredTrainings" :key="training.id" :training="training" @delete="deleteTraining" @pass="passTraining" />
     </div>
-    <p v-else class="text-xl lg:text-3xl">Здесь пока ничего нет</p>
+    <Empty v-else></Empty>
   </div>
 </template>
 
@@ -25,6 +25,7 @@
 import TrainingCard from '~/components/TrainingCard.vue';
 import { MUSCLEGROUPS, SPORT_EQUIPMENT } from '~/constants/exerciseConstants';
 import type Training from '~/types/trainings/TrainingType';
+import Empty from '~/components/states/Empty.vue';
 
 const { trainings, isLoading, loadTrainings} = useTrainings();
 
