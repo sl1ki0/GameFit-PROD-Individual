@@ -93,14 +93,38 @@
 
         <!-- Диалог автоподбора -->
         <Dialog header="Автоподбор упражнений" v-model:visible="autoSelectDialogVisible" :modal="true" :closable="true">
-            <div class="space-y-4">
-                <div>
-                    <label class="block mb-1">Выберите часть тела</label>
-                    <Dropdown v-model="autoSelectedBodyPart" :options="MUSCLEGROUPS" optionLabel="name"
-                        optionValue="value" placeholder="Часть тела" class="w-full" />
+            <Form v-slot="$form" :initialValues="initialValues" :resolver="resolver" @submit="applyAutoSelect"
+                class="flex flex-col items-center gap-4 w-full h-full">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block mb-2">Выберите часть тела</label>
+                        <Dropdown id="autoMuscleGroup" name="autoMuscleGroup" v-model="initialValues.autoMuscleGroup"
+                            :options="MUSCLEGROUPS" optionLabel="name" optionValue="value" placeholder="Часть тела"
+                            class="w-full" />
+                        <Message v-if="$form.autoMuscleGroup?.invalid" severity="error" size="small" variant="simple">
+                            {{ $form.autoMuscleGroup.error?.message }}
+                        </Message>
+                    </div>
+                    <div>
+                        <label class="block mb-2">Введите количество упражнений</label>
+                        <InputNumber id="autoAmount" name="autoAmount" v-model="initialValues.autoAmount"
+                            inputId="horizontal-buttons" showButtons buttonLayout="horizontal" :step="1" :min="1"
+                            :max="exercises.length" fluid>
+                            <template #incrementbuttonicon>
+                                <!-- если тут ругается IDE, то она не права, это из официальной документации primevue -->
+                                <span class="pi pi-plus" />
+                            </template>
+                            <template #decrementbuttonicon>
+                                <span class="pi pi-minus" />
+                            </template>
+                        </InputNumber>
+                        <Message v-if="$form.autoAmount?.invalid" severity="error" size="small" variant="simple">
+                            {{ $form.autoAmount.error?.message }}
+                        </Message>
+                    </div>
+                    <Button label="Подобрать упражнения" icon="pi pi-search" class="w-full" type="submit" />
                 </div>
-                <Button label="Подобрать упражнения" icon="pi pi-search" class="w-full" @click="applyAutoSelect" />
-            </div>
+            </Form>
         </Dialog>
     </div>
 </template>
@@ -110,8 +134,10 @@ import { MUSCLEGROUPS } from '~/constants/exerciseConstants';
 import type Exercise from '~/types/trainings/ExerciseType';
 import type TypicalSelectValue from '~/types/typicalSelect/TypicalSelectValue';
 import ExerciseFilters from '~/components/exerciseList/ExerciseFilters.vue';
+import { z } from 'zod';
+import { zodResolver } from '@primevue/forms/resolvers/zod';
 
-const { exercises, isLoading, loadExercises } = useExercises();
+const { exercises } = useExercises();
 const selectedDifficulty = ref<TypicalSelectValue | null>(null);
 const selectedMuscleGroup = ref<TypicalSelectValue | null>(null);
 const selectedItem = ref<TypicalSelectValue | null>(null);
@@ -167,17 +193,52 @@ const isOverload = (exercise: Exercise): boolean => {
     return true // Костылек для проверки верстки, нагуглю формулы и сделаю
 }
 
-// Автоподбор через диалог (нужно доделать)
-const autoSelectDialogVisible = ref<boolean>(false)
-const autoSelectedBodyPart = ref<string | null>(null)
-const autoSelectedType = ref<string | null>(null)
+
+const autoSelectDialogVisible = ref<boolean>(false);
+const autoSelectedBodyPart = ref<string | null>(null);
+const autoSelectedAmountOfExercises = ref<number | null>(null);
+const initialValues = ref({
+    autoMuscleGroup: null,
+    autoAmount: 1
+});
+
+const schema = z.object({
+    autoMuscleGroup: z.preprocess(
+        extractValue,
+        z.enum(["Грудь", "Руки", "Спина", "Ноги", "Общее"], { message: "Выберите группу мышц" })
+    ),
+    autoAmount: z.number()
+})
+
+const resolver = zodResolver(schema)
 
 const openAutoSelectDialog = () => {
     autoSelectDialogVisible.value = true
 }
 
-const applyAutoSelect = () => {
-    return
+const applyAutoSelect = (data: { valid: boolean }) => {
+    if (!data.valid) {
+        return
+    };
+
+    const filteredExercises = exercises.value.filter((exercise: Exercise) =>
+        exercise.muscleGroup === initialValues.value.autoMuscleGroup
+    );
+
+    for (let i = 0; i < filteredExercises.length; i++) {
+        if (planExercises.value.length == initialValues.value.autoAmount) {
+            break
+        };
+
+        const item = filteredExercises[i]
+
+        planExercises.value.push({
+            exercise: item,
+            count: 1
+        });
+    }
+
+    autoSelectDialogVisible.value = false;
 }
 
 const savePlan = () => {
