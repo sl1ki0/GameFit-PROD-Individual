@@ -41,3 +41,15 @@
     return `${items.slice(0, 3).join(', ')} и ${items.length - 3} других`;
   };
   </script>
+
+<style>
+.p-card-body{
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  }
+
+.p-card-footer{
+  margin-top: auto !important;
+}
+</style>
