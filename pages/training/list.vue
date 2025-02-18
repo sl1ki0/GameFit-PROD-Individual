@@ -14,44 +14,24 @@
         <Button label="Сбросить фильтры" icon="pi pi-filter-slash" class="p-button-secondary w-full mt-2 md:mt-0" @click="resetFilters" />
       </div>
     </div>
-    <div v-if="trainings" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div v-if="trainings.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <TrainingCard v-for="training in filteredTrainings" :key="training.id" :training="training" @delete="deleteTraining" @pass="passTraining" />
     </div>
-    <p v-else class="text-3xl">Здесь пока ничего нет</p>
+    <p v-else class="text-xl lg:text-3xl">Здесь пока ничего нет</p>
   </div>
 </template>
 
 <script setup lang="ts">
 import TrainingCard from '~/components/TrainingCard.vue';
 import { MUSCLEGROUPS, SPORT_EQUIPMENT } from '~/constants/exerciseConstants';
+import type Training from '~/types/trainings/TrainingType';
 
-interface Training {
-  id: number;
-  name: string;
-  description: string;
-  muscleGroup: string;
-  equipment: string[];
-}
-
-interface MuscleGroup {
-  name: string;
-}
-
-interface EquipmentOption {
-  name: string;
-}
-
-const trainings = ref<Training[]>([
-  { id: 1, name: 'Отжимания', description: 'Стандартные отжимания от пола.', muscleGroup: 'Грудь', equipment: [] },
-  { id: 2, name: 'Подтягивания', description: 'Подтягивания на перекладине.', muscleGroup: 'Спина', equipment: ['Перекладина'] },
-  { id: 3, name: 'Жим штанги лежа', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!', muscleGroup: 'Грудь', equipment: ['Штанга', 'Скамья','Штанга', 'Скамья'] },
-  { id: 4, name: 'Тяга гантелей к животу', description: 'Тяга гантелей к животу.', muscleGroup: 'Ягодицы', equipment: ['Гантели'] },
-]);
+const { trainings, isLoading, loadTrainings} = useTrainings();
 
 const searchQuery = ref<string>('');
 
-const selectedMuscleGroup = ref<MuscleGroup | null>(null);
-const selectedEquipment = ref<EquipmentOption | null>(null);
+const selectedMuscleGroup = ref<string | null>(null);
+const selectedEquipment = ref<string | null>(null);
 
 const deleteTraining = (training: Training) => {
   return

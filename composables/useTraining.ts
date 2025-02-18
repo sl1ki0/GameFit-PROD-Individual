@@ -12,6 +12,9 @@ export function useTrainings() {
     try {
       isLoading.value = true;
       const keys = await trainingDataStorage.keys();
+      if (!keys) {
+        return null
+      }
       const data = await Promise.all(
         keys.map(async (key) => await trainingDataStorage.getItem(key) as Training)
       );
