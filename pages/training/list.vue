@@ -30,8 +30,9 @@ const { trainings, isLoading, loadTrainings} = useTrainings();
 
 const searchQuery = ref<string>('');
 
-const selectedMuscleGroup = ref<string | null>(null);
-const selectedEquipment = ref<string | null>(null);
+
+const selectedMuscleGroup = ref<{name: string} | null>(null);
+const selectedEquipment = ref<{name: string} | null>(null);
 
 const deleteTraining = (training: Training) => {
   return
