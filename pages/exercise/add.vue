@@ -9,6 +9,7 @@ import exerciseDataStorage from '~/storage/exerciseData';
 import { nanoid } from 'nanoid';
 import type Exercise from '~/types/trainings/ExerciseType';
 import { useToast } from '#imports';
+import Loading from '~/components/states/Loading.vue';
 
 const toast = useToast();
 
