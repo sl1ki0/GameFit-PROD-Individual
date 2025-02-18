@@ -39,7 +39,7 @@ const handleSubmit = async (data: ExerciseFromSubmitArgs) => {
         items: data.values.items,
         instruction: data.values.instruction,
         media: data.values.media,
-        usedIn: null,
+        usedIn: [],
         metric: data.values.metric
     }
     try {

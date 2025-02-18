@@ -3,17 +3,17 @@
   <div class="p-4">
     <h1 class="text-3xl font-bold mb-4">Каталог упражнений</h1>
     <div class="mb-4 space-y-4 md:space-y-0 md:flex md:space-x-4">
-      <Dropdown v-model="selectedDifficulty" :options="DIFFICULTIES" optionLabel="name" placeholder="Select Difficulty"
+      <Dropdown v-model="selectedDifficulty" :options="DIFFICULTIES" optionLabel="name" placeholder="Выберите сложность"
         class="w-full md:w-auto" />
       <Dropdown v-model="selectedMuscleGroup" :options="MUSCLEGROUPS" optionLabel="name"
-        placeholder="Select Muscle Group" class="w-full md:w-auto" />
-      <Dropdown v-model="selectedItem" :options="SPORT_EQUIPMENT" optionLabel="name" placeholder="Select Item"
+        placeholder="Выберите группу мышц" class="w-full md:w-auto" />
+      <Dropdown v-model="selectedItem" :options="SPORT_EQUIPMENT" optionLabel="name" placeholder="Выберите экипировку"
         class="w-full md:w-auto" />
       <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
-        <Button label="Add Exercise" icon="pi pi-plus" class="p-button-success w-full md:w-auto"
-          @click="openAddExercisePage" />
-        <Button label="Clear Filters" icon="pi pi-filter-slash" class="p-button-danger w-full md:w-auto"
+        <Button label="Очистить фильтры" icon="pi pi-filter-slash" class="p-button-secondary w-full md:w-auto"
           @click="clearFilters" />
+        <Button label="Добавить упражнение" icon="pi pi-plus" class="p-button-success w-full md:w-auto"
+          @click="openAddExercisePage" />
       </div>
     </div>
     <DataTable :value="filteredExercises" paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"
@@ -51,16 +51,16 @@ const toast = useToast();
 const { exercises, isLoading, loadExercises } = useExercises();
 
 const handleDeletion = (id: string, usedIn: Array<string> | null) => {
-  if (!usedIn){
+  if (!usedIn) {
     deleteExercise(id, toast);
     loadExercises();
-  } else{
+  } else {
     toast.add({
-            severity: 'error',
-            summary: 'Произошла ошибка',
-            detail: 'Это упражнение используется в тренировке',
-            life: 2500,
-        })
+      severity: 'error',
+      summary: 'Произошла ошибка',
+      detail: 'Это упражнение используется в тренировке',
+      life: 2500,
+    })
   }
 }
 

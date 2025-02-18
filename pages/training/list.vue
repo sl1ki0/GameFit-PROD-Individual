@@ -1,3 +1,79 @@
 <template>
-    Тренировки
+  <div class="container mx-auto p-4">
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-3xl font-bold">Тренировки</h1>
+      <Button label="Добавить" icon="pi pi-plus" />
+    </div>
+    <div class="mb-4">
+      <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
+        <InputText v-model="searchQuery" placeholder="Поиск по названию" class="w-full mb-2 md:mb-0" />
+        <div class="flex flex-col md:flex-row w-full space-y-2 md:space-y-0 md:space-x-4">
+          <Dropdown v-model="selectedMuscleGroup" :options="MUSCLEGROUPS" placeholder="Группа мышц" optionLabel="name" class="w-full" @change="filterTrainings" />
+          <Dropdown v-model="selectedEquipment" :options="SPORT_EQUIPMENT" placeholder="Оборудование" optionLabel="name" class="w-full" @change="filterTrainings" />
+        </div>
+        <Button label="Сбросить фильтры" icon="pi pi-filter-slash" class="p-button-secondary w-full mt-2 md:mt-0" @click="resetFilters" />
+      </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <TrainingCard v-for="training in filteredTrainings" :key="training.id" :training="training" @delete="deleteTraining" @pass="passTraining" />
+    </div>
+  </div>
 </template>
+
+<script setup lang="ts">
+import TrainingCard from '~/components/TrainingCard.vue';
+import { MUSCLEGROUPS, SPORT_EQUIPMENT } from '~/constants/exerciseConstants';
+
+interface Training {
+  id: number;
+  name: string;
+  description: string;
+  muscleGroup: string;
+  equipment: string[];
+}
+
+interface MuscleGroup {
+  name: string;
+}
+
+interface EquipmentOption {
+  name: string;
+}
+
+const trainings = ref<Training[]>([
+  { id: 1, name: 'Отжимания', description: 'Стандартные отжимания от пола.', muscleGroup: 'Грудь', equipment: [] },
+  { id: 2, name: 'Подтягивания', description: 'Подтягивания на перекладине.', muscleGroup: 'Спина', equipment: ['Перекладина'] },
+  { id: 3, name: 'Жим штанги лежа', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!', muscleGroup: 'Грудь', equipment: ['Штанга', 'Скамья','Штанга', 'Скамья'] },
+  { id: 4, name: 'Тяга гантелей к животу', description: 'Тяга гантелей к животу.', muscleGroup: 'Ягодицы', equipment: ['Гантели'] },
+]);
+
+const searchQuery = ref<string>('');
+
+const selectedMuscleGroup = ref<MuscleGroup | null>(null);
+const selectedEquipment = ref<EquipmentOption | null>(null);
+
+const deleteTraining = (training: Training) => {
+  return
+};
+
+const passTraining = (training: Training) => {
+  return
+};
+
+const filterTrainings = () => {
+  return trainings.value.filter(training => {
+    const nameMatch = !searchQuery.value || training.name.toLowerCase().includes(searchQuery.value.toLowerCase());
+    const muscleMatch = !selectedMuscleGroup.value || training.muscleGroup === selectedMuscleGroup.value.name;
+    const equipmentMatch = !selectedEquipment.value || training.equipment.includes(selectedEquipment.value.name);
+    return nameMatch && muscleMatch && equipmentMatch;
+  });
+};
+
+const resetFilters = () => {
+  searchQuery.value = '';
+  selectedMuscleGroup.value = null;
+  selectedEquipment.value = null;
+};
+
+const filteredTrainings = computed<Training[]>(filterTrainings);
+</script>
