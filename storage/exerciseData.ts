@@ -1,4 +1,5 @@
 import localForage from 'localforage';
+import { APP_NAME } from '~/constants/branding';
 
 const exerciseDataStorage = localForage.createInstance({
     driver: [
@@ -6,7 +7,7 @@ const exerciseDataStorage = localForage.createInstance({
         localForage.LOCALSTORAGE,
         localForage.WEBSQL,
     ],
-    name: 'IndexedDB-exerciseDara',
+    name: APP_NAME + 'IndexedDB-exerciseDara',
 });
 
 export default exerciseDataStorage;

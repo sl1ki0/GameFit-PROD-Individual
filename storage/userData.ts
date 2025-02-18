@@ -1,4 +1,5 @@
 import localForage from 'localforage';
+import { APP_NAME } from '~/constants/branding';
 
 const userDataStorage = localForage.createInstance({
     driver: [
@@ -6,7 +7,7 @@ const userDataStorage = localForage.createInstance({
         localForage.LOCALSTORAGE,
         localForage.WEBSQL,
     ],
-    name: 'IndexedDB-userData',
+    name: APP_NAME + 'IndexedDB-userData',
 });
 
 export default userDataStorage;
