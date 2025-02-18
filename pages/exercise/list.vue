@@ -104,7 +104,7 @@ const openAddExercisePage = () => {
 </script>
 
 
-<style>
+<style scoped>
 .p-datatable-tbody>tr:hover {
   background-color: var(--p-button-secondary-hover-background) !important;
   cursor: pointer !important;

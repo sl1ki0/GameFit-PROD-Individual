@@ -185,7 +185,7 @@ const finishForm = async (data: SecondFormSubmitArgs): Promise<void> => {
     <Loading :is-loading="isLoading"></Loading>
 </template>
 
-<style>
+<style scoped>
 :root {
     --p-stepper-steppanel-background: none !important;
 }
