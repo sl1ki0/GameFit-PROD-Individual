@@ -2,7 +2,7 @@
   <div class="container mx-auto p-4">
     <div class="flex justify-between items-center mb-4">
       <h1 class="text-3xl font-bold">Тренировки</h1>
-      <Button label="Добавить" icon="pi pi-plus" />
+      <Button label="Добавить" icon="pi pi-plus" @click="redirectToConstructor"/>
     </div>
     <div class="mb-4">
       <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
@@ -57,6 +57,8 @@ const resetFilters = () => {
   selectedMuscleGroup.value = null;
   selectedEquipment.value = null;
 };
+
+const redirectToConstructor = () => navigateTo('/training/contructor');
 
 const filteredTrainings = computed<Training[]>(filterTrainings);
 </script>
