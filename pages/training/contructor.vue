@@ -93,7 +93,7 @@
           </div>
         </div>
   
-        <div v-if="planExercises.length === 0" class="text-center text-gray-500">
+        <div v-if="planExercises.length === 0" class="text-center ">
           Вы не добавили упражнения.
         </div>
   
@@ -119,7 +119,7 @@
             <InputNumber class="w-1/6" v-model.number="exercise.count" />
               <Slider v-model="exercise.count" class="w-1/6" />
             </div>
-            <span class="text-sm text-gray-500">
+            <span class="text-sm ">
               {{ exercise.exercise.metric }}
             </span>
   
