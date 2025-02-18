@@ -1,7 +1,7 @@
 <template>
   <Toast />
   <div class="p-4">
-    <h1 class="text-3xl font-bold mb-4">Каталог упражнений</h1>
+    <h1 class="mb-4 font-bold text-3xl">Каталог упражнений</h1>
     <ExerciseFilters @update-filters="updateFilters" />
     <ExerciseTable :exercises="filteredExercises" @reload-exercises="loadExercises" />
   </div>

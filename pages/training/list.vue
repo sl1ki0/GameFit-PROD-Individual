@@ -1,21 +1,25 @@
 <template>
-  <div class="container mx-auto p-4">
+  <div class="mx-auto p-4 container">
     <div class="flex justify-between items-center mb-4">
-      <h1 class="text-3xl font-bold">Тренировки</h1>
-      <Button label="Добавить" class="p-button-success" icon="pi pi-plus" @click="redirectToConstructor"/>
+      <h1 class="font-bold text-3xl">Тренировки</h1>
+      <Button label="Добавить" class="p-button-success" icon="pi pi-plus" @click="redirectToConstructor" />
     </div>
     <div class="mb-4">
-      <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
-        <InputText v-model="searchQuery" placeholder="Поиск по названию" class="w-full mb-2 md:mb-0" />
-        <div class="flex flex-col md:flex-row w-full space-y-2 md:space-y-0 md:space-x-4">
-          <Dropdown v-model="selectedMuscleGroup" :options="MUSCLEGROUPS" placeholder="Группа мышц" optionLabel="name" class="w-full" @change="filterTrainings" />
-          <Dropdown v-model="selectedEquipment" :options="SPORT_EQUIPMENT" placeholder="Оборудование" optionLabel="name" class="w-full" @change="filterTrainings" />
+      <div class="flex md:flex-row flex-col md:space-x-4 space-y-2 md:space-y-0">
+        <InputText v-model="searchQuery" placeholder="Поиск по названию" class="mb-2 md:mb-0 w-full" />
+        <div class="flex md:flex-row flex-col md:space-x-4 space-y-2 md:space-y-0 w-full">
+          <Dropdown v-model="selectedMuscleGroup" :options="MUSCLEGROUPS" placeholder="Группа мышц" optionLabel="name"
+            class="w-full" @change="filterTrainings" />
+          <Dropdown v-model="selectedEquipment" :options="SPORT_EQUIPMENT" placeholder="Оборудование" optionLabel="name"
+            class="w-full" @change="filterTrainings" />
         </div>
-        <Button label="Сбросить фильтры" icon="pi pi-filter-slash" class="p-button-secondary w-full mt-2 md:mt-0" @click="resetFilters" />
+        <Button label="Сбросить фильтры" icon="pi pi-filter-slash" class="mt-2 md:mt-0 p-button-secondary w-full"
+          @click="resetFilters" />
       </div>
     </div>
-    <div v-if="trainings.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      <TrainingCard v-for="training in filteredTrainings" :key="training.id" :training="training" @delete="deleteTraining" @pass="passTraining" />
+    <div v-if="trainings.length > 0" class="gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      <TrainingCard v-for="training in filteredTrainings" :key="training.id" :training="training"
+        @delete="deleteTraining" @pass="passTraining" />
     </div>
     <Empty v-else></Empty>
   </div>
@@ -27,13 +31,13 @@ import { MUSCLEGROUPS, SPORT_EQUIPMENT } from '~/constants/exerciseConstants';
 import type Training from '~/types/trainings/TrainingType';
 import Empty from '~/components/states/Empty.vue';
 
-const { trainings, isLoading, loadTrainings} = useTrainings();
+const { trainings, isLoading, loadTrainings } = useTrainings();
 
 const searchQuery = ref<string>('');
 
 
-const selectedMuscleGroup = ref<{name: string} | null>(null);
-const selectedEquipment = ref<{name: string} | null>(null);
+const selectedMuscleGroup = ref<{ name: string } | null>(null);
+const selectedEquipment = ref<{ name: string } | null>(null);
 
 const deleteTraining = (training: Training) => {
   return

@@ -61,7 +61,7 @@ const handleSubmit = async (data: ExerciseFromSubmitArgs) => {
 </script>
 
 <template>
-    <div class="min-h-[calc(100vh-58px)] w-full flex justify-center items-center">
+    <div class="flex justify-center items-center w-full min-h-[calc(100vh-58px)]">
         <Card class="w-full min-h-[calc(100vh-58px)]" style="border: 1px solid #10b981">
             <template #title>
                 <h2 class="text-center">Создать упражнение</h2>
@@ -71,7 +71,7 @@ const handleSubmit = async (data: ExerciseFromSubmitArgs) => {
                     class="flex flex-col items-center gap-4 w-full h-full">
 
                     <div class="flex flex-col gap-1 w-2/3">
-                        <label for="name" class="font-semibold text-lg mb-2">Укажите название</label>
+                        <label for="name" class="mb-2 font-semibold text-lg">Укажите название</label>
                         <InputText v-model="initialValues.name" id="name" name="name" type="text" placeholder="Название"
                             class="w-full" />
                         <Message v-if="$form.name?.invalid" severity="error" size="small" variant="simple">
@@ -81,7 +81,7 @@ const handleSubmit = async (data: ExerciseFromSubmitArgs) => {
 
 
                     <div class="flex flex-col gap-1 w-2/3">
-                        <label for="difficulty" class="font-semibold text-lg mb-2">Выберите сложность</label>
+                        <label for="difficulty" class="mb-2 font-semibold text-lg">Выберите сложность</label>
                         <Select id="difficulty" name="difficulty" :options="DIFFICULTIES" optionLabel="name"
                             placeholder="Сложность" class="w-full" />
                         <Message v-if="$form.difficulty?.invalid" severity="error" size="small" variant="simple">
@@ -91,7 +91,7 @@ const handleSubmit = async (data: ExerciseFromSubmitArgs) => {
 
 
                     <div class="flex flex-col gap-1 w-2/3">
-                        <label for="muscleGroup" class="font-semibold text-lg mb-2">Выберите группу мышц</label>
+                        <label for="muscleGroup" class="mb-2 font-semibold text-lg">Выберите группу мышц</label>
                         <Select id="muscleGroup" name="muscleGroup" :options="MUSCLEGROUPS" optionLabel="name"
                             placeholder="Часть тела" class="w-full" />
                         <Message v-if="$form.muscleGroup?.invalid" severity="error" size="small" variant="simple">
@@ -101,7 +101,7 @@ const handleSubmit = async (data: ExerciseFromSubmitArgs) => {
 
 
                     <div class="flex flex-col gap-1 w-2/3">
-                        <label for="items" class="font-semibold text-lg mb-2">Выберите инвентарь</label>
+                        <label for="items" class="mb-2 font-semibold text-lg">Выберите инвентарь</label>
                         <MultiSelect id="items" name="items" :options="SPORT_EQUIPMENT" display="chip"
                             optionLabel="name" filter placeholder="Инвентарь" :maxSelectedLabels="5" :show-clear="true"
                             class="w-full" />
@@ -112,7 +112,7 @@ const handleSubmit = async (data: ExerciseFromSubmitArgs) => {
 
 
                     <div class="flex flex-col gap-1 w-2/3">
-                        <label for="metric" class="font-semibold text-lg mb-2">Выберите единицу измерения</label>
+                        <label for="metric" class="mb-2 font-semibold text-lg">Выберите единицу измерения</label>
                         <Select id="metric" name="metric" :options="METRICS" optionLabel="name"
                             placeholder="Единица измерения" class="w-full" />
                         <Message v-if="$form.metrics?.invalid" severity="error" size="small" variant="simple">
@@ -122,7 +122,7 @@ const handleSubmit = async (data: ExerciseFromSubmitArgs) => {
 
 
                     <div class="flex flex-col gap-1 w-2/3">
-                        <label for="instruction" class="font-semibold text-lg mb-2">Введите описание
+                        <label for="instruction" class="mb-2 font-semibold text-lg">Введите описание
                             (инструкцию)</label>
                         <Editor id="instruction" name="instruction" editorStyle="height: 320px">
                             <template v-slot:toolbar>
@@ -139,7 +139,7 @@ const handleSubmit = async (data: ExerciseFromSubmitArgs) => {
                     </div>
 
                     <div class="flex flex-col gap-1 w-2/3">
-                        <label for="media" class="font-semibold text-lg mb-2">Перечислите ссылки на видео и фото</label>
+                        <label for="media" class="mb-2 font-semibold text-lg">Перечислите ссылки на видео и фото</label>
                         <InputText id="media" name="media" type="text" placeholder="Перечислите через пробел"
                             class="w-full" />
                         <Message v-if="$form.media?.invalid" severity="error" size="small" variant="simple">
@@ -147,7 +147,7 @@ const handleSubmit = async (data: ExerciseFromSubmitArgs) => {
                         </Message>
                     </div>
 
-                    <div class="w-2/3 lg:mt-2">
+                    <div class="lg:mt-2 w-2/3">
                         <Button type="submit" severity="primary" label="Готово" class="w-full" />
                     </div>
                 </Form>
