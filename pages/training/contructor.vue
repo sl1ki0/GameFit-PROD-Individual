@@ -4,7 +4,7 @@
         <aside class="p-4 w-full md:w-1/3 overflow-y-auto">
             <h2 class="mb-4 font-bold text-2xl">Каталог упражнений</h2>
 
-            <ExerciseFilters @update-filters="updateFilters" />
+            <ExerciseFilters @update-filters="updateFilters" container-style="flex flex-col space-y-4 md:space-y-0 mb-4 gap-4" buttons-style="w-full h-full mb-2"/>
 
             <!-- Список упражнений -->
             <div class="space-y-3">
@@ -38,7 +38,9 @@
             </div>
         </aside>
 
-        <Divider layout="vertical"><b class="pi-arrow-right pi"></b></Divider>
+        <div class="hidden lg:block">
+            <Divider layout="vertical"><b class="pi-arrow-right pi"></b></Divider>
+        </div>
 
         <!-- Конструктор тренировки -->
         <main class="flex-1 p-6 overflow-y-auto">
@@ -72,8 +74,8 @@
 
                         <!-- Управление параметрами -->
                         <div class="flex flex-col gap-4 mt-3 mb-2">
-                            <InputNumber class="w-1/6" v-model.number="exercise.count" />
-                            <Slider v-model="exercise.count" class="w-1/6" />
+                            <InputNumber :min="1" class="w-1/6" v-model.number="exercise.count" />
+                            <Slider :min="1" v-model="exercise.count" class="w-1/6" />
                         </div>
                         <span class="text-sm">
                             {{ exercise.exercise.metric }}
@@ -148,7 +150,7 @@ const planExercises = ref<any>([])
 const addExerciseToPlan = (exercise: Exercise) => {
     planExercises.value.push({
         exercise,
-        count: 0
+        count: 1
     })
 }
 

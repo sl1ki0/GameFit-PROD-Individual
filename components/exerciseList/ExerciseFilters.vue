@@ -1,15 +1,15 @@
 <template>
-  <div class="mb-4 space-y-4 md:space-y-0 md:flex md:space-x-4">
+  <div :class="containerStyle">
     <Dropdown v-model="selectedDifficulty" :options="difficulties" optionLabel="name" placeholder="Выберите сложность"
       class="w-full md:w-auto" />
     <Dropdown v-model="selectedMuscleGroup" :options="muscleGroups" optionLabel="name"
       placeholder="Выберите группу мышц" class="w-full md:w-auto" />
     <Dropdown v-model="selectedItem" :options="sportEquipment" optionLabel="name" placeholder="Выберите экипировку"
       class="w-full md:w-auto" />
-    <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
-      <Button label="Очистить фильтры" icon="pi pi-filter-slash" class="p-button-secondary w-full md:w-auto"
+    <div class="flex md:flex-row flex-col md:space-x-2 space-y-2 md:space-y-0">
+      <Button label="Очистить фильтры" icon="pi pi-filter-slash" class="p-button-secondary" :class="buttonsStyle"
         @click="clearFilters" />
-      <Button label="Добавить упражнение" icon="pi pi-plus" class="p-button-success w-full md:w-auto"
+      <Button label="Добавить упражнение" icon="pi pi-plus" class="p-button-success" :class="buttonsStyle"
         @click="openAddExercisePage" />
     </div>
   </div>
@@ -18,6 +18,11 @@
 <script setup lang="ts">
 import { DIFFICULTIES, MUSCLEGROUPS, SPORT_EQUIPMENT } from '~/constants/exerciseConstants';
 import type { FilterOption } from '~/types/trainings/ExercisesFilterTypes';
+
+defineProps({
+  containerStyle: String,
+  buttonsStyle: String
+})
 
 const difficulties = DIFFICULTIES;
 const muscleGroups = MUSCLEGROUPS;
