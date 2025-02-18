@@ -22,24 +22,11 @@
 </template>
   
   <script setup lang="ts">
-  
-  interface Training {
-    id: number;
-    name: string;
-    description: string;
-    muscleGroup: string;
-    equipment: string[];
-  }
-  
+  import type Training from '~/types/trainings/TrainingType';
+
   const props = defineProps<{
     training: Training;
   }>();
-  
-  const formatItems = (items: string[]): string => {
-    if (items.length === 0) return 'Нет';
-    if (items.length <= 3) return items.join(', ');
-    return `${items.slice(0, 3).join(', ')} и ${items.length - 3} других`;
-  };
   </script>
 
 <style>
