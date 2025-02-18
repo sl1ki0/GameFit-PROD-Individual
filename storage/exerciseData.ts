@@ -7,7 +7,7 @@ const exerciseDataStorage = localForage.createInstance({
         localForage.LOCALSTORAGE,
         localForage.WEBSQL,
     ],
-    name: APP_NAME + 'IndexedDB-exerciseDara',
+    name: APP_NAME + '-exerciseDara',
 });
 
 export default exerciseDataStorage;

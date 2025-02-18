@@ -1,13 +1,13 @@
 import localForage from 'localforage';
 import { APP_NAME } from '~/constants/branding';
 
-const userDataStorage = localForage.createInstance({
+const trainingDataStorage = localForage.createInstance({
     driver: [
         localForage.INDEXEDDB,
         localForage.LOCALSTORAGE,
         localForage.WEBSQL,
     ],
-    name: APP_NAME + '-userData',
+    name: APP_NAME + '-trainingData',
 });
 
-export default userDataStorage;
+export default trainingDataStorage;
