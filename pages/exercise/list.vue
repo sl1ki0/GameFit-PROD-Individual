@@ -16,7 +16,7 @@
           @click="openAddExercisePage" />
       </div>
     </div>
-    <DataTable :value="filteredExercises" paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"
+    <DataTable v-if="exercises?.length > 0" :value="filteredExercises" paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"
       paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
       currentPageReportTemplate="Показано с {first} по {last} из {totalRecords}" responsiveLayout="scroll"
       @row-click="openExercisePage">
@@ -35,6 +35,7 @@
         </template>
       </Column>
     </DataTable>
+    <Empty v-else></Empty>
   </div>
 </template>
 
@@ -46,6 +47,7 @@ import type { FilterOption, ExerciseEvent } from '~/types/trainings/ExercisesFil
 import { formatItems } from '#imports';
 import deleteExercise from '~/utils/deleteExcercise';
 import { useToast } from "#imports";
+import Empty from '~/components/states/Empty.vue';
 
 const toast = useToast();
 const { exercises, isLoading, loadExercises } = useExercises();
