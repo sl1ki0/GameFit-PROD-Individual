@@ -4,7 +4,8 @@
         <aside class="p-4 w-full md:w-1/3 overflow-y-auto">
             <h2 class="mb-4 font-bold text-2xl">Каталог упражнений</h2>
 
-            <ExerciseFilters @update-filters="updateFilters" container-style="flex flex-col space-y-4 md:space-y-0 mb-4 gap-4" buttons-style="w-full h-full mb-2"/>
+            <ExerciseFilters @update-filters="updateFilters"
+                container-style="flex flex-col space-y-4 md:space-y-0 mb-4 gap-4" buttons-style="w-full h-full mb-2" />
 
             <!-- Список упражнений -->
             <div class="space-y-3">
@@ -94,7 +95,7 @@
         <Dialog header="Автоподбор упражнений" v-model:visible="autoSelectDialogVisible" :modal="true" :closable="true">
             <div class="space-y-4">
                 <div>
-                    <label class="block mb-1 text-gray-700">Выберите часть тела</label>
+                    <label class="block mb-1">Выберите часть тела</label>
                     <Dropdown v-model="autoSelectedBodyPart" :options="MUSCLEGROUPS" optionLabel="name"
                         optionValue="value" placeholder="Часть тела" class="w-full" />
                 </div>
