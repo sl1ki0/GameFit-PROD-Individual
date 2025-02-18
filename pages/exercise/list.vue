@@ -53,7 +53,7 @@ const toast = useToast();
 const { exercises, isLoading, loadExercises } = useExercises();
 
 const handleDeletion = (id: string, usedIn: Array<string> | null) => {
-  if (!usedIn) {
+  if (usedIn?.length === 0) {
     deleteExercise(id, toast);
     loadExercises();
   } else {
