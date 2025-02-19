@@ -80,6 +80,7 @@
       </Form>
     </Dialog>
   </div>
+  <Loading v-if="isLoading"></Loading>
 </template>
 
 <script setup lang="ts">
@@ -92,8 +93,14 @@ import ExercisesCatalog from '~/components/contructor/ExercisesCatalog.vue';
 import type PlanExercise from '~/types/trainings/PlanExercise';
 import DesktopExerciseConstructor from '~/components/contructor/DesktopExerciseConstructor.vue';
 import MobileExerciseContructor from '~/components/contructor/MobileExerciseContructor.vue';
+import trainingDataStorage from '~/storage/trainingData';
+import type Training from '~/types/trainings/TrainingType';
+import { nanoid } from 'nanoid';
+import { transformPlanExercises } from '#imports';
+import Loading from '~/components/states/Loading.vue';
 
 const toast = useToast();
+
 
 // Исходные данные и фильтрация
 const { exercises } = useExercises();
@@ -194,23 +201,42 @@ const savePlan = () => {
   saveDialog.value = true
 };
 
-const onSaveDialogSubmit = (data: { valid: boolean }) => {
+const isLoading = ref<boolean>(false)
+
+const onSaveDialogSubmit = async (data: { valid: boolean }) => {
   if (!data.valid) {
     return
   }
 
-  const transformedArray = planExercises.value.map(({ exercise: { id }, count }) => ({
-    exId: id,
-    count
-  }));
+  isLoading.value = true;
 
-  try {
-    
-  } catch (err) {
-    
+  const { transformedArray, mostCommonMuscleGroup, mostCommonDifficulty, uniqueItems } = transformPlanExercises(planExercises.value);
+
+  const finalTraining: Training = {
+    id: nanoid(),
+    name: saveDialogValues.value.name,
+    description: saveDialogValues.value.description,
+    muscleGroup: mostCommonMuscleGroup,
+    difficulty: mostCommonDifficulty,
+    exercises: transformedArray,
+    equipment: uniqueItems
   }
 
-  saveDialog.value = false;
+  try {
+    await trainingDataStorage.setItem<Training>(finalTraining.id, finalTraining)
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : String(err);
+        toast.add({
+            severity: 'error',
+            summary: 'Произошла ошибка',
+            detail: errorMessage,
+            life: 3500,
+      });
+  } finally {
+    saveDialog.value = false;
+    isLoading.value = false;
+    navigateTo('/training/list')
+  }
 }
 </script>
 

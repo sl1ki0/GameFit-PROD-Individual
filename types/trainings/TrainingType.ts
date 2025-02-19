@@ -6,6 +6,7 @@ export default interface Training {
         exId: string,
         count: number
     }>;
-    muscleGroup: "Грудь" | "Руки" | "Спина" | "Ноги" | "Общее";
+    muscleGroup: string;
+    difficulty: string;
     equipment: string[]
 }
