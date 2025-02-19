@@ -26,7 +26,6 @@ export function useTrainings() {
     }
   };
 
-
   onMounted(loadTrainings);
 
   return { trainings, isLoading, loadTrainings };
