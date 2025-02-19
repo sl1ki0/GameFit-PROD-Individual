@@ -4,7 +4,8 @@
             <h2 class="mb-4 md:mb-0 font-bold text-2xl md:text-3xl">
                 Конструктор тренировки
             </h2>
-            <PlanControlButtons @open-auto-dialog="$emit('openAutoDialog')" @reset="$emit('reset')" @save="$emit('save')" />
+            <PlanControlButtons @open-auto-dialog="$emit('openAutoDialog')" @reset="$emit('reset')"
+                @save="$emit('save')" />
         </div>
 
         <div v-if="planExercises?.length === 0" class="text-center">
@@ -49,10 +50,10 @@ const props = defineProps({
 });
 
 const emit = defineEmits<{
-  (event: 'openAutoDialog'): void,
-  (event: 'reset'): void,
-  (event: 'save'): void,
-  (event: 'removeEx', payload: number): void,
+    (event: 'openAutoDialog'): void,
+    (event: 'reset'): void,
+    (event: 'save'): void,
+    (event: 'removeEx', payload: number): void,
 }>();
 
 </script>

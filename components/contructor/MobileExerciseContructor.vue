@@ -1,11 +1,11 @@
 <template>
-    <div class="block md:hidden fixed bottom-0 left-0 right-0 z-50 autoBg shadow-lg transition-all duration-300"
+    <div class="md:hidden block right-0 bottom-0 left-0 z-50 fixed shadow-lg transition-all duration-300 autoBg"
         :class="isExpanded ? 'h-[80vh]' : 'h-16'">
 
         <div @click="$emit('toggle')">
             <!-- Ручка для перетаскивания/открытия -->
-            <div class="w-full flex justify-center items-center cursor-pointer">
-                <div class="w-12 h-1 bg-gray-300 rounded-full my-2"></div>
+            <div class="flex justify-center items-center w-full cursor-pointer">
+                <div class="bg-gray-300 my-2 rounded-full w-12 h-1"></div>
             </div>
             <!-- Заголовок в свернутом состоянии -->
             <div v-if="!isExpanded" class="px-4 pb-2">
@@ -14,11 +14,11 @@
         </div>
 
         <!-- Содержимое, доступное при раскрытии -->
-        <div v-if="isExpanded" class="p-4 overflow-y-auto h-full">
+        <div v-if="isExpanded" class="p-4 h-full overflow-y-auto">
             <div class="flex flex-col">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="font-bold text-2xl">Конструктор тренировки</h2>
-                    <Button label="Закрыть" icon="pi pi-times" class="p-button-rounded p-button-text"
+                    <Button label="Закрыть" icon="pi pi-times" class="p-button-text p-button-rounded"
                         @click="$emit('toggle')" />
                 </div>
                 <div v-if="planExercises?.length === 0" class="text-center">
@@ -50,7 +50,8 @@
                         </template>
                     </Card>
                 </div>
-                <PlanControlButtons :is-mobile="true" @open-auto-dialog="$emit('openAutoDialog')" @reset="$emit('reset')" @save="$emit('save')" />
+                <PlanControlButtons :is-mobile="true" @open-auto-dialog="$emit('openAutoDialog')"
+                    @reset="$emit('reset')" @save="$emit('save')" />
             </div>
         </div>
     </div>
@@ -66,11 +67,11 @@ const props = defineProps({
 });
 
 const emit = defineEmits<{
-  (event: 'openAutoDialog'): void,
-  (event: 'reset'): void,
-  (event: 'save'): void,
-  (event: 'removeEx', payload: number): void,
-  (event: 'toggle'): void,
+    (event: 'openAutoDialog'): void,
+    (event: 'reset'): void,
+    (event: 'save'): void,
+    (event: 'removeEx', payload: number): void,
+    (event: 'toggle'): void,
 }>();
 
 </script>

@@ -13,7 +13,7 @@
     </Column>
     <Column header="Удалить">
       <template #body="slotProps">
-        <Button icon="pi pi-trash" class="p-button-danger p-button-rounded p-button-text"
+        <Button icon="pi pi-trash" class="p-button-danger p-button-text p-button-rounded"
           @click="handleDeletion(slotProps.data.id, slotProps.data.usedIn)" />
       </template>
     </Column>

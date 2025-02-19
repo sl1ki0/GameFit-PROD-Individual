@@ -54,10 +54,10 @@
     </Dialog>
 
     <!-- Диалог сохранения -->
-    <Dialog class="w-full h-full lg:h-1/2 lg:w-1/4" header="Сохранить тренировку" v-model:visible="saveDialog"
+    <Dialog class="w-full lg:w-1/4 h-full lg:h-1/2" header="Сохранить тренировку" v-model:visible="saveDialog"
       :modal="true" :closable="true">
       <Form v-slot="$form" :initialValues="saveDialogValues" :resolver="saveDialogResolver" @submit="onSaveDialogSubmit"
-        class="flex flex-col items-center gap-4 w-full h-full lg:gap-8">
+        class="flex flex-col items-center gap-4 lg:gap-8 w-full h-full">
         <div class="flex flex-col gap-1 w-2/3">
           <label for="name" class="mb-2 font-semibold text-lg">Укажите название</label>
           <InputText v-model="saveDialogValues.name" id="name" name="name" type="text" placeholder="Название"
