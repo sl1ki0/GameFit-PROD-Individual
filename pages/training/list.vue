@@ -19,7 +19,7 @@
     </div>
     <div v-if="trainings.length > 0" class="gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       <TrainingCard v-for="training in filteredTrainings" :key="training.id" :training="training"
-        @delete="deleteTraining" @pass="passTraining" />
+        @reloadTrainings="loadTrainings" />
     </div>
     <Empty v-else></Empty>
   </div>
