@@ -44,7 +44,8 @@ const handleSubmit = async (data: ExerciseFromSubmitArgs) => {
         metric: data.values.metric
     }
     try {
-        await exerciseDataStorage.setItem(finalData.id, finalData)
+        await exerciseDataStorage.setItem(finalData.id, finalData);
+        navigateTo('/exercise/list')
     } catch (err: unknown) {
         const errorMessage = err instanceof Error ? err.message : String(err);
         toast.add({
@@ -55,7 +56,6 @@ const handleSubmit = async (data: ExerciseFromSubmitArgs) => {
         });
     } finally {
         isLoading.value = false;
-        navigateTo('/exercise/list')
     }
 };
 </script>
