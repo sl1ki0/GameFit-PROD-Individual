@@ -216,12 +216,10 @@ const onSaveDialogSubmit = async (data: { valid: boolean }) => {
     equipment: uniqueItems
   };
 
-  let success = false;
-
   try {
     await trainingDataStorage.setItem<Training>(finalTraining.id, finalTraining);
     await updateExercisesUsedIn(planExercises.value, finalTraining.id);
-    success = true; 
+    navigateTo('/training/list');
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : String(err);
     toast.add({
@@ -235,10 +233,6 @@ const onSaveDialogSubmit = async (data: { valid: boolean }) => {
   } finally {
     saveDialog.value = false;
     isLoading.value = false;
-
-    if (success) {
-      navigateTo('/training/list');
-    }
   }
 };
 
