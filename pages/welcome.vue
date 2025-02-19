@@ -20,7 +20,7 @@
         <div class="z-10 fade-in">
             <article class="mb-12 text-center">
                 <h1 class="mb-4 font-bold text-4xl md:text-6xl">{{ APP_NAME }}</h1>
-                <p class="text-gray-300 text-xl md:text-2xl">Your Ultimate Fitness Companion</p>
+                <p class="text-xl md:text-2xl">Your Ultimate Fitness Companion</p>
             </article>
             <div class="text-center">
                 <Button @click="handleClick()" label="Начать" class="custom-button p-button-lg p-button-rounded"
