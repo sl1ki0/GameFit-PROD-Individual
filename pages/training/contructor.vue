@@ -1,25 +1,23 @@
-<!-- Слишком большой компонент, пишу комменты чтобы не запутаться, нужна декомпозиция -->
-
 <template>
   <Toast position="top-left"></Toast>
   <div class="flex md:flex-row flex-col h-screen">
-    <!-- Каталог упражнений -->
+
     <ExercisesCatalog @add-to-plan="addExerciseToPlan" />
 
     <div class="hidden md:block">
       <Divider layout="vertical"><b class="pi-arrow-right pi"></b></Divider>
     </div>
 
-    <!-- Конструктор тренировки для десктопа -->
+
     <DesktopExerciseConstructor :plan-exercises="planExercises" @open-auto-dialog="openAutoSelectDialog"
       @reset="resetPlan" @save="savePlan" @remove-ex="removeExerciseFromPlan" />
 
-    <!-- Конструктор тренировки для мобильных устройств -->
+
     <MobileExerciseContructor :is-expanded="mobileWorkoutExpanded" :plan-exercises="planExercises"
       @open-auto-dialog="openAutoSelectDialog" @reset="resetPlan" @save="savePlan" @remove-ex="removeExerciseFromPlan"
       @toggle="toggleMobileWorkout" />
 
-    <!-- Диалог автоподбора -->
+
     <Dialog header="Автоподбор упражнений" v-model:visible="autoSelectDialogVisible" :modal="true" :closable="true">
       <Form v-slot="$form" :initialValues="autoFilterValues" :resolver="autoFilterResolver" @submit="applyAutoSelect"
         class="flex flex-col items-center gap-4 w-full h-full">
@@ -53,7 +51,7 @@
       </Form>
     </Dialog>
 
-    <!-- Диалог сохранения -->
+
     <Dialog class="w-full lg:w-1/4 h-full lg:h-1/2" header="Сохранить тренировку" v-model:visible="saveDialog"
       :modal="true" :closable="true">
       <Form v-slot="$form" :initialValues="saveDialogValues" :resolver="saveDialogResolver" @submit="onSaveDialogSubmit"
@@ -98,15 +96,16 @@ import type Training from '~/types/trainings/TrainingType';
 import { nanoid } from 'nanoid';
 import { transformPlanExercises } from '#imports';
 import Loading from '~/components/states/Loading.vue';
+import { updateExercisesUsedIn } from '#imports';
 
 const toast = useToast();
 
 
-// Исходные данные и фильтрация
+
 const { exercises } = useExercises();
 
 
-// План тренировки
+
 const planExercises = ref<Array<PlanExercise>>([]);
 const addExerciseToPlan = (exercise: Exercise) => {
   planExercises.value.push({
@@ -127,17 +126,13 @@ const removeExerciseFromPlan = (index: number) => {
 const resetPlan = () => {
   planExercises.value = [];
 };
-const isOverload = (): boolean => {
-  return true; // Пример проверки для визуализации верстки
-};
 
-// Мобильное состояние для bottom-sheet
 const mobileWorkoutExpanded = ref(false);
 const toggleMobileWorkout = () => {
   mobileWorkoutExpanded.value = !mobileWorkoutExpanded.value;
 };
 
-// Диалог автоподбора
+
 const autoSelectDialogVisible = ref<boolean>(false);
 const autoFilterValues = ref({
   autoMuscleGroup: null,
@@ -172,7 +167,6 @@ const applyAutoSelect = (data: { valid: boolean }) => {
   autoSelectDialogVisible.value = false;
 };
 
-// Диалог сохранения (НАДО ЭТО ДЕКОМОПЗИРОВАТЬ ТОЧНО)
 
 const saveDialog = ref<boolean>(false);
 const saveDialogValues = ref({
@@ -205,7 +199,7 @@ const isLoading = ref<boolean>(false)
 
 const onSaveDialogSubmit = async (data: { valid: boolean }) => {
   if (!data.valid) {
-    return
+    return;
   }
 
   isLoading.value = true;
@@ -220,24 +214,34 @@ const onSaveDialogSubmit = async (data: { valid: boolean }) => {
     difficulty: mostCommonDifficulty,
     exercises: transformedArray,
     equipment: uniqueItems
-  }
+  };
+
+  let success = false;
 
   try {
-    await trainingDataStorage.setItem<Training>(finalTraining.id, finalTraining)
+    await trainingDataStorage.setItem<Training>(finalTraining.id, finalTraining);
+    await updateExercisesUsedIn(planExercises.value, finalTraining.id);
+    success = true; 
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : String(err);
-        toast.add({
-            severity: 'error',
-            summary: 'Произошла ошибка',
-            detail: errorMessage,
-            life: 3500,
-      });
+    toast.add({
+      severity: 'error',
+      summary: 'Произошла ошибка',
+      detail: errorMessage,
+      life: 3500,
+    });
+
+    await trainingDataStorage.removeItem(finalTraining.id);
   } finally {
     saveDialog.value = false;
     isLoading.value = false;
-    navigateTo('/training/list')
+
+    if (success) {
+      navigateTo('/training/list');
+    }
   }
-}
+};
+
 </script>
 
 
