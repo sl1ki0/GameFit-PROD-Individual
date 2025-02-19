@@ -2,7 +2,7 @@
   <Toast />
   <div class="p-4">
     <h1 class="mb-4 font-bold text-3xl">Каталог упражнений</h1>
-    <ExerciseFilters @update-filters="updateFilters" container-style="md:flex md:space-x-4 space-y-4 md:space-y-0 mb-4" buttons-style="w-full md:w-auto" />
+    <ExerciseFilters @update-filters="updateFilters" container-style="md:flex md:space-x-4 space-y-4 md:space-y-0 mb-4" buttons-style="w-full md:w-auto" :add-btn="true" />
     <ExerciseTable :exercises="filteredExercises" @reload-exercises="loadExercises" />
   </div>
 </template>

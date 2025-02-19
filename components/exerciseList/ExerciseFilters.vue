@@ -9,7 +9,7 @@
     <div class="flex md:flex-row flex-col md:space-x-2 space-y-2 md:space-y-0">
       <Button label="Очистить фильтры" icon="pi pi-filter-slash" class="p-button-secondary" :class="buttonsStyle"
         @click="clearFilters" />
-      <Button label="Добавить упражнение" icon="pi pi-plus" class="p-button-success" :class="buttonsStyle"
+      <Button v-if="addBtn" label="Добавить упражнение" icon="pi pi-plus" class="p-button-success" :class="buttonsStyle"
         @click="openAddExercisePage" />
     </div>
   </div>
@@ -21,7 +21,8 @@ import type { FilterOption } from '~/types/trainings/ExercisesFilterTypes';
 
 defineProps({
   containerStyle: String,
-  buttonsStyle: String
+  buttonsStyle: String,
+  addBtn: Boolean
 })
 
 const difficulties = DIFFICULTIES;
