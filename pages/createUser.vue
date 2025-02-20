@@ -15,12 +15,14 @@ definePageMeta({
 
 const firstFormValues = ref<FirstFormValues>({
     username: '',
-    gender: ''
+    gender: '',
+    age: null
 });
 
 const firstStepSchema = z.object({
     username: z.string().min(1, { message: 'Обязательно заполните имя' }),
     gender: z.string().min(1, { message: 'Обязательно выберите пол' }),
+    age: z.number().min(5, {message: "Вы должны быть хотя-бы старше 5"}).max(180, {message: 'Введите настоящий возраст'})
 });
 
 const firstStepResolver = ref(zodResolver(firstStepSchema));
@@ -60,6 +62,7 @@ const finishForm = async (data: SecondFormSubmitArgs): Promise<void> => {
         await userDataStorage.setItem('user', {
             username: firstFormValues.value.username,
             gender: firstFormValues.value.gender,
+            age: firstFormValues.value.age,
             weight: secondFormValues.value.weight,
             height: secondFormValues.value.height,
             sportActivity: secondFormValues.value.sportActivity,
@@ -102,6 +105,14 @@ const finishForm = async (data: SecondFormSubmitArgs): Promise<void> => {
                                 <InputText id="username" name="username" type="text" placeholder="Имя" fluid />
                                 <Message v-if="$form.username?.invalid" severity="error" size="small" variant="simple">
                                     {{ $form.username.error?.message }}
+                                </Message>
+                            </div>
+
+                            <div class="flex flex-col gap-1">
+                                <label for="age" class="font-semibold text-lg">Укажите ваш возраст</label>
+                                <InputNumber id="age" name="age" placeholder="Возраст" fluid />
+                                <Message v-if="$form.age?.invalid" severity="error" size="small" variant="simple">
+                                    {{ $form.age.error?.message }}
                                 </Message>
                             </div>
 
