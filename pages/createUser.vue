@@ -6,6 +6,7 @@ import type SecondFormSubmitArgs from '~/types/createUser/SecondFormSubmitArgs';
 import userDataStorage from '~/storage/userData';
 import type { FirstFormValues, SecondFormValues, UserData } from '~/types/createUser/UserDataTypes';
 import { useToast } from 'primevue/usetoast';
+import Loading from '~/components/states/Loading.vue';
 
 definePageMeta({
     layout: false
@@ -149,20 +150,20 @@ const finishForm = async (data: SecondFormSubmitArgs): Promise<void> => {
                             </div>
 
                             <div class="flex flex-col gap-2">
-                                <p class="font-semibold text-lg">Как часто вы занимаетесь спортом?</p>
+                                <p class="font-semibold text-lg">Оцените уровень своей спорт. подготовки</p>
                                 <RadioButtonGroup id="sportActivity" name="sportActivity"
                                     class="flex flex-col flex-wrap gap-4">
                                     <div class="flex items-center gap-2">
-                                        <RadioButton inputId="1timeaweeek" value="1" />
-                                        <label for="1timeaweeek">Менее 1 раза в неделю</label>
+                                        <RadioButton inputId="beginner" value="1" />
+                                        <label for="beginner">Начальный</label>
                                     </div>
                                     <div class="flex items-center gap-2">
-                                        <RadioButton inputId="2timeaweeek" value="2" />
-                                        <label for="2timeaweeek">1-2 раза в неделю</label>
+                                        <RadioButton inputId="medium" value="2" />
+                                        <label for="medium">Средний</label>
                                     </div>
                                     <div class="flex items-center gap-2">
-                                        <RadioButton inputId="3timeaweek" value="3" />
-                                        <label for="3timeaweek">3 и более раз в неделю</label>
+                                        <RadioButton inputId="advanced" value="3" />
+                                        <label for="advanced">Продвинутый</label>
                                     </div>
                                 </RadioButtonGroup>
                                 <Message v-if="$form.sportActivity?.invalid" severity="error" size="small"
