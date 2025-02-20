@@ -12,31 +12,8 @@
             Вы не добавили упражнения.
         </div>
 
-        <div v-else class="space-y-4">
-            <Card v-for="(exercise, index) in planExercises" :key="index"
-                class="shadow-md hover:shadow-lg p-4 transition-shadow">
-                <template #content>
-                    <div class="flex justify-between items-center">
-                        <h3 class="font-bold text-xl">{{ exercise.exercise.name }}</h3>
-                        <Button icon="pi pi-times" class="p-button-text" severity="danger"
-                            @click="$emit('removeEx', index)" />
-                    </div>
-
-
-                    <div class="flex flex-col gap-4 mt-3 mb-2">
-                        <InputNumber :min="1" class="w-1/6" v-model.number="exercise.count" />
-                        <Slider :min="1" v-model="exercise.count" class="w-1/6" />
-                    </div>
-                    <span class="text-sm">
-                        {{ exercise.exercise.metric }}
-                    </span>
-
-
-                    <div v-if="false" class="mt-2 font-medium text-red-600 text-sm">
-                        Предупреждение: слишком высокая нагрузка!
-                    </div>
-                </template>
-            </Card>
+        <div v-for="(exercise, index) in planExercises" v-else class="space-y-4">
+            <ContructorCard :exercise="exercise" :index="index" :input-style="'w-1/6'" :slider-style="'w-1/6'" @remove-ex="$emit('removeEx', index)" />
         </div>
     </main>
 </template>
@@ -44,6 +21,7 @@
 <script setup lang="ts">
 import type PlanExercise from '~/types/trainings/PlanExercise';
 import PlanControlButtons from './PlanControlButtons.vue';
+import ContructorCard from './ContructorCard.vue';
 
 const props = defineProps({
     planExercises: Array<PlanExercise>

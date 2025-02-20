@@ -5,7 +5,6 @@
         <ExerciseFilters @update-filters="updateFilters"
             container-style="flex flex-col space-y-4 md:space-y-0 mb-4 gap-4" buttons-style="w-full h-full mb-2" />
 
-        <!-- Список упражнений -->
         <div class="space-y-3">
             <Card v-for="exercise in filteredExercises" :key="exercise.id" class="hover:shadow-lg transition-shadow">
                 <template #title>
