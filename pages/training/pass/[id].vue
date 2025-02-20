@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex flex-col items-center gap-8">
-      <h1 class="text-3xl font-semibold mt-4">{{ training?.name }}</h1>
+      <h1 class="mt-4 font-semibold text-3xl">{{ training?.name }}</h1>
 
       <StepCard v-if="training" :ex-id="training.exercises[currentStep].exId" :count="training.exercises[currentStep].count" :index="currentStep" @complete="currentStep++" />
     </div>

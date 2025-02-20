@@ -1,5 +1,5 @@
 <template>
-    <Galleria v-if="exercise?.media" :key="index" :value="exercise?.media" :numVisible="5" containerStyle="max-width: 100vw"
+    <Galleria v-if="exercise?.media && !rest" :key="index" :value="exercise?.media" :numVisible="5" containerStyle="max-width: 100vw"
         :showThumbnails="false" :showIndicators="true">
         <template #item="slotProps">
             <img :src="slotProps.item" :alt="slotProps.item" style="width: 100%; max-height: 15vh; display: block" />
@@ -8,17 +8,20 @@
     <transition name="swipe" mode="out-in">
         <Card :key="index" style="width: 25rem; overflow: hidden">
             <template #content>
-                <div class="flex flex-col items-center w-full h-full gap-4">
+                <div v-if="!rest" class="flex flex-col items-center w-full h-full gap-4">
                     <h2 class="text-xl font-semibold">{{ exercise?.name }}</h2>
                     <div v-html="exercise?.instruction"></div>
-                    <Countdown v-if="exercise?.metric === 'Время (сек)' " :duration="count"></Countdown>
+                    <Countdown v-if="exercise?.metric === 'Время (сек)' " :duration="count" @complete="handleCompletion"></Countdown>
                     <p v-else>{{ actionText }}</p>
+                </div>
+                <div v-else class="flex flex-col items-center w-full h-full gap-4">
+                    <h2 class="text-xl font-semibold">Отдых</h2>
+                    <Countdown :duration="count" :isRest="rest" @complete="handleEndRest"></Countdown>
                 </div>
             </template>
             <template #footer>
-                <div class="flex gap-4 mt-1">
-                    <Button label="Cancel" severity="secondary" outlined class="w-full" />
-                    <Button label="Save" class="w-full" @click="$emit('complete')" />
+                <div v-if="exercise?.metric !== 'Время (сек)' && !rest " class="flex gap-4 mt-1">
+                    <Button label="Выполнено" severity="secondary" icon="pi pi-check" class="w-full" @click="handleCompletion" />
                 </div>
             </template>
         </Card>
@@ -28,7 +31,7 @@
 <script setup lang="ts">
 import type Exercise from '~/types/trainings/ExerciseType';
 import { getExerciseByKey } from '#imports';
-import Countdown from '../pass/Countdown.vue';
+import Countdown from './Countdown.vue';
 
 const props = defineProps<{
     exId: string;
@@ -71,6 +74,18 @@ const actionText = computed(() => {
         return `Сделать ${props.count} ${exercise.value.metric}`
   }
 });
+
+const rest = ref(false);
+
+const handleCompletion = () => {
+    rest.value = true;
+    
+}
+
+const handleEndRest = () => {
+    rest.value = false;
+    emit('complete')
+}
 </script>
 
 <style scoped>

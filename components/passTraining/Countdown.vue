@@ -7,18 +7,23 @@
       <div class="absolute font-semibold text-2xl animated-time">
         {{ formattedTime }}
       </div>
+
+      <div v-if="isRest" class="flex justify-evenly w-full h-full">
+        <Button label="10" severity="secondary" icon="pi pi-minus" class="w-full" @click="minus10" />
+        <Button label="10" severity="info" icon="pi pi-plus" class="w-full" @click="plus10" />
+      </div>
     </div>
 </template>
   
 <script setup lang="ts">
-const props = defineProps({ duration: { type: Number, required: true } }) 
+const props = defineProps({ duration: { type: Number, required: true }, isRest: {type: Boolean} }) 
 
 const emit = defineEmits<{
     (event: 'complete'): void,
 }>();
   
   const remainingTime = ref(props.duration)
-  const progress = ref(0)
+  const progress = ref<number>(0)
   const timerId = ref<ReturnType<typeof setInterval> | null>(null)
   const radius = 70
   const circumference = 2 * Math.PI * radius
@@ -43,9 +48,23 @@ const emit = defineEmits<{
       } else {
         if (timerId.value) clearInterval(timerId.value)
         timerId.value = null
-        console.log('Таймер завершен!')
+        emit('complete')
       }
     }, 1000)
+  };
+
+  const minus10 =  () => {
+    remainingTime.value = remainingTime.value - 10;
+    progress.value = progress.value + 10;
+  };
+
+  const plus10 = () => {
+    remainingTime.value = remainingTime.value + 10;
+    if (progress.value >= 10) {
+      progress.value = progress.value - 10;
+    } else{
+      progress.value = 0
+    }
   }
   
   watch(progress, () => {
