@@ -33,14 +33,30 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-    (event: 'reloadTrainings'): void
+  (event: 'reloadTrainings'): void
 }>();
 
 const toast = useToast();
 
 const handleDeletion = async (id: string) => {
-  await deleteTraining(id);
-  emit('reloadTrainings');
+  try {
+    await deleteTraining(id);
+    toast.add({
+      severity: 'success',
+      summary: 'Успех!',
+      detail: "Успешно удалено",
+      life: 1500,
+    });
+    emit('reloadTrainings');
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    toast.add({
+      severity: 'error',
+      summary: 'Произошла ошибка',
+      detail: errorMessage,
+      life: 3500,
+    });
+  }
 }
 </script>
 
