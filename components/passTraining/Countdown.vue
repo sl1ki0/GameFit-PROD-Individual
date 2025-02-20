@@ -8,7 +8,7 @@
         {{ formattedTime }}
       </div>
 
-      <div v-if="isRest" class="flex justify-evenly w-full h-full">
+      <div v-if="isRest" class="flex justify-between w-full h-full">
         <Button label="10" severity="secondary" icon="pi pi-minus" class="w-full" @click="minus10" />
         <Button label="10" severity="info" icon="pi pi-plus" class="w-full" @click="plus10" />
       </div>
@@ -16,75 +16,75 @@
 </template>
   
 <script setup lang="ts">
-const props = defineProps({ duration: { type: Number, required: true }, isRest: {type: Boolean} }) 
-
+const props = defineProps({ duration: { type: Number, required: true }, isRest: { type: Boolean } }) 
 const emit = defineEmits<{
     (event: 'complete'): void,
-}>();
-  
-  const remainingTime = ref(props.duration)
-  const progress = ref<number>(0)
-  const timerId = ref<ReturnType<typeof setInterval> | null>(null)
-  const radius = 70
-  const circumference = 2 * Math.PI * radius
-  
-  const progressOffset = computed(() => {
-    return circumference - (progress.value / props.duration) * circumference
-  })
-  
-  const formattedTime = computed(() => {
-    const timeInSeconds = Math.max(0, Math.floor(remainingTime.value))
-    const minutes = Math.floor(timeInSeconds / 60).toString().padStart(2, '0')
-    const seconds = (timeInSeconds % 60).toString().padStart(2, '0')
-    return `${minutes}:${seconds}`
-  })
-  
-  const startTimer = () => {
-    if (timerId.value) return
-    timerId.value = setInterval(() => {
-      if (remainingTime.value > 0) {
-        remainingTime.value--
-        progress.value++
-      } else {
-        if (timerId.value) clearInterval(timerId.value)
-        timerId.value = null
-        emit('complete')
-      }
-    }, 1000)
-  };
+}>()
 
-  const minus10 =  () => {
-    remainingTime.value = remainingTime.value - 10;
-    progress.value = progress.value + 10;
-  };
+const remainingTime = ref(props.duration)
+const progress = ref(0)
+const timerId = ref<ReturnType<typeof setInterval> | null>(null)
+const totalDuration = ref(props.duration)
 
-  const plus10 = () => {
-    remainingTime.value = remainingTime.value + 10;
-    if (progress.value >= 10) {
-      progress.value = progress.value - 10;
-    } else{
-      progress.value = 0
+const radius = 70
+const circumference = 2 * Math.PI * radius
+
+const progressOffset = computed(() => {
+  return circumference - (progress.value / totalDuration.value) * circumference
+})
+
+const formattedTime = computed(() => {
+  const timeInSeconds = Math.max(0, Math.floor(remainingTime.value))
+  const minutes = Math.floor(timeInSeconds / 60).toString().padStart(2, '0')
+  const seconds = (timeInSeconds % 60).toString().padStart(2, '0')
+  return `${minutes}:${seconds}`
+})
+
+const startTimer = () => {
+  if (timerId.value) return
+  timerId.value = setInterval(() => {
+    if (remainingTime.value > 0) {
+      remainingTime.value--
+      progress.value++
+    } else {
+      if (timerId.value) clearInterval(timerId.value)
+      timerId.value = null
+      emit('complete')
     }
+  }, 1000)
+};
+
+const minus10 = () => {
+  if (remainingTime.value >= 10 && totalDuration.value >= 10) {
+    remainingTime.value -= 10
+    totalDuration.value -= 10
   }
+};
+
+const plus10 = () => {
+  remainingTime.value += 10
+  totalDuration.value += 10
+}
+
+watch(progress, () => {
+  const element = document.querySelector('.animated-time')
+  if (!element) return
   
-  watch(progress, () => {
-    const element = document.querySelector('.animated-time')
-    if (!element) return
-    
-    element.classList.add('pulse')
-    setTimeout(() => {
-      element.classList.remove('pulse')
-    }, 500)
-  })
-  
-  onMounted(() => {
-    startTimer()
-  })
-  
-  onBeforeUnmount(() => {
-    if (timerId.value) clearInterval(timerId.value)
-  })
-  </script>
+  element.classList.add('pulse')
+  setTimeout(() => {
+    element.classList.remove('pulse')
+  }, 500)
+})
+
+onMounted(() => {
+  startTimer()
+})
+
+onBeforeUnmount(() => {
+  if (timerId.value) clearInterval(timerId.value)
+})
+</script>
+
   
   <style scoped>
   @keyframes pulse {
