@@ -58,7 +58,7 @@
         class="flex flex-col items-center gap-4 lg:gap-8 w-full h-full">
         <div class="flex flex-col gap-1 w-2/3">
           <label for="name" class="mb-2 font-semibold text-lg">Укажите название</label>
-          <InputText v-model="saveDialogValues.name" id="name" name="name" type="text" placeholder="Название"
+          <InputText :maxlength="35" v-model="saveDialogValues.name" id="name" name="name" type="text" placeholder="Название"
             class="w-full" />
           <Message v-if="$form.name?.invalid" severity="error" size="small" variant="simple">
             {{ $form.name?.error?.message }}
@@ -66,7 +66,7 @@
         </div>
         <div class="flex flex-col gap-1 w-2/3">
           <label for="description" class="mb-2 font-semibold text-lg">Укажите описание</label>
-          <Textarea :max="45" v-model="saveDialogValues.description" id="description" name="description" rows="5"
+          <Textarea :maxlength="90" v-model="saveDialogValues.description" id="description" name="description" rows="5"
             cols="30" style="resize: none" />
           <Message v-if="$form.description?.invalid" severity="error" size="small" variant="simple">
             {{ $form.description?.error?.message }}
@@ -175,8 +175,8 @@ const saveDialogValues = ref({
 });
 
 const saveDialogSchema = z.object({
-  name: z.string().min(1, { message: "Введите название" }),
-  description: z.string().min(1, { message: "Введите описание" }).max(45, { message: "Должно быть не более 45 символов" })
+  name: z.string().min(1, { message: "Введите название" }).max(35, { message: "Должно быть не более 35 символов" }),
+  description: z.string().min(1, { message: "Введите описание" }).max(90, { message: "Должно быть не более 90 символов" })
 })
 
 const saveDialogResolver = zodResolver(saveDialogSchema);
