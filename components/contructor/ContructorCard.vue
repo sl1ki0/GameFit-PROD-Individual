@@ -7,6 +7,7 @@
             </div>
 
             <div class="flex flex-col gap-4 mt-3 mb-2">
+                <p class="text-md font-semibold">Рекомендованная цель: {{ exTarget }}</p>
                 <InputNumber :min="1" :class="inputStyle" v-model.number="exercise!.count" />
                 <Slider :min="1" v-model="exercise!.count" :class="sliderStyle" />
             </div>
@@ -14,22 +15,40 @@
                 {{ exercise!.exercise.metric }}
             </span>
 
-            <HighLoad v-if="false" />
+            <HighLoad v-if="exercise.count > exUpperLimit" />
         </template>
     </Card>
 </template>
 
 <script setup lang="ts">
 import HighLoad from '../states/HighLoad.vue';
+import calculateExercise from '~/utils/calc/calculateExercise';
+import type PlanExercise from '~/types/trainings/PlanExercise';
 
-const props = defineProps({
-    index: Number,
-    exercise: Object,
-    inputStyle: String,
-    sliderStyle: String
-});
+const props = defineProps<{
+  index: number;
+  exercise: PlanExercise;
+  inputStyle: string;
+  sliderStyle: string;
+}>();
 
+const exTarget = ref(0);
+const exUpperLimit =  ref(0)
 
+onMounted(async () => {
+    if (!props.exercise) {
+        return
+    }
+
+    try {
+        const { target, upperLimit } = await calculateExercise(props.exercise.exercise);
+        console.log(target, upperLimit)
+        exTarget.value = target;
+        exUpperLimit.value =  upperLimit;
+    } catch (err) {
+        console.error(err);
+    }
+})
 
 const emit = defineEmits<{
     (event: 'removeEx', payload: number): void,

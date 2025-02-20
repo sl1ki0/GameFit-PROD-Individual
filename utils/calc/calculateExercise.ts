@@ -1,6 +1,7 @@
 import type Exercise from "~/types/trainings/ExerciseType";
 import userDataStorage from "~/storage/userData";
 import type HealthData from "~/types/createUser/HealthData";
+import type { UserData } from "~/types/createUser/UserDataTypes";
 
 type MetricPresets = {
     base: { [goal: string]: { [level: number]: number } },
@@ -59,23 +60,18 @@ const presets: { [key in Exercise['metric']]: MetricPresets } = {
 };
 
 const calculateExercise = async (
-    user: {
-        weight: number;
-        height: number;
-        fitnessLevel: 1 | 2 | 3;
-        age: number;
-    },
     exercise: Exercise
 ) => {
     const healthData: HealthData | null = await userDataStorage.getItem('health');
-    if (!healthData) {
-        throw new Error('Отсутствует информация о здоровье')
+    const user: UserData | null = await userDataStorage.getItem('user');
+    if (!healthData || !user) {
+        throw new Error('Отсутствует информация о пользователе')
     }
     const goal = healthData.baseGoal;
-    const ageFactor = user.age >= 50 ? 0.85 + (user.fitnessLevel * 0.05) : 1;
+    const ageFactor = user.age >= 50 ? 0.85 + (user.sportActivity * 0.05) : 1;
 
-    const base = presets[exercise.metric].base[goal][user.fitnessLevel];
-    const maxMult = presets[exercise.metric].maxMultiplier[goal][user.fitnessLevel];
+    const base = presets[exercise.metric].base[goal][user.sportActivity];
+    const maxMult = presets[exercise.metric].maxMultiplier[goal][user.sportActivity];
 
     let target = base;
     if (exercise.metric === 'Вес (кг)') {
