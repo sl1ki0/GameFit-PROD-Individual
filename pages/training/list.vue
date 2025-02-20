@@ -1,4 +1,5 @@
 <template>
+  <Toast></Toast>
   <div class="mx-auto p-4 container">
     <div class="flex justify-between items-center mb-4">
       <h1 class="font-bold text-3xl">Тренировки</h1>

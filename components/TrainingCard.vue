@@ -1,5 +1,4 @@
 <template>
-  <Toast></Toast>
   <Card class="overflow-hidden w-full lg:w-4/5">
     <template #title>{{ training.name }}</template>
     <template #subtitle>{{ training.muscleGroup }}</template>
