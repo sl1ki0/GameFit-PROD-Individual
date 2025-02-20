@@ -8,14 +8,14 @@
     <transition name="swipe" mode="out-in">
         <Card :key="index" style="width: 25rem; overflow: hidden">
             <template #content>
-                <div v-if="!rest" class="flex flex-col items-center w-full h-full gap-4">
-                    <h2 class="text-xl font-semibold">{{ exercise?.name }}</h2>
+                <div v-if="!rest" class="flex flex-col items-center gap-4 w-full h-full">
+                    <h2 class="font-semibold text-xl">{{ exercise?.name }}</h2>
                     <div v-html="exercise?.instruction"></div>
                     <Countdown v-if="exercise?.metric === 'Время (сек)' " :duration="count" @complete="handleCompletion"></Countdown>
                     <p v-else>{{ actionText }}</p>
                 </div>
-                <div v-else class="flex flex-col items-center w-full h-full gap-4">
-                    <h2 class="text-xl font-semibold">Отдых</h2>
+                <div v-else class="flex flex-col items-center gap-4 w-full h-full">
+                    <h2 class="font-semibold text-xl">Отдых</h2>
                     <Countdown :duration="count" :isRest="rest" @complete="handleEndRest"></Countdown>
                 </div>
             </template>
@@ -43,21 +43,17 @@ const emit = defineEmits<{
     (event: 'complete'): void,
 }>();
 
-const exercise = ref<Exercise | null>()
+const exercise = ref<Exercise | null>(null)
 
-onMounted(async () => {
+const initExercise = async () => {
     exercise.value = await getExerciseByKey(props.exId);
-})
+}
 
-watch(
-    () => props.exId,
-    async (newId) => {
-        if (newId) {
-            exercise.value = await getExerciseByKey(props.exId);
-        }
-    },
-    { immediate: true }
-);
+watchEffect(async () => {
+    if (props.exId) {
+        await initExercise();
+    }
+});
 
 const actionText = computed(() => {
   if (!exercise.value) return '';
