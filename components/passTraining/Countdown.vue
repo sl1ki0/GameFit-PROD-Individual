@@ -1,24 +1,34 @@
 <template>
-    <div class="relative flex flex-col justify-center items-center p-6">
+  <div class="flex flex-col justify-center items-center p-6">
+    <!-- Контейнер для таймера с фиксированными размерами -->
+    <div class="relative w-[160px] h-[160px]">
       <svg class="progress-ring" width="160" height="160">
         <circle class="progress-ring__background" cx="80" cy="80" r="70" stroke-width="10" />
-        <circle class="progress-ring__progress" cx="80" cy="80" r="70" stroke-width="10" stroke-linecap="round" :stroke-dasharray="circumference" :stroke-dashoffset="progressOffset"/>
+        <circle class="progress-ring__progress" cx="80" cy="80" r="70" stroke-width="10" stroke-linecap="round"
+          :stroke-dasharray="circumference" :stroke-dashoffset="progressOffset" />
       </svg>
-      <div class="absolute font-semibold text-2xl animated-time">
+
+      <div class="absolute inset-0 flex justify-center items-center font-semibold text-2xl animated-time">
         {{ formattedTime }}
       </div>
-
-      <div v-if="isRest" class="flex justify-between w-full h-full">
-        <Button label="10" severity="secondary" icon="pi pi-minus" class="w-full" @click="minus10" />
-        <Button label="10" severity="info" icon="pi pi-plus" class="w-full" @click="plus10" />
-      </div>
     </div>
+
+    <div v-if="isRest" class="flex flex-col sm:flex-row gap-4 mt-4 w-full justify-center px-4">
+      <Button label="10" severity="secondary" icon="pi pi-minus"
+        class="flex-1 py-3 px-6 text-lg md:py-4 md:px-8 md:text-xl" @click="minus10" />
+      <Button label="10" severity="info" icon="pi pi-plus" class="flex-1 py-3 px-6 text-lg md:py-4 md:px-8 md:text-xl"
+        @click="plus10" />
+    </div>
+  </div>
 </template>
-  
+
 <script setup lang="ts">
-const props = defineProps({ duration: { type: Number, required: true }, isRest: { type: Boolean } }) 
+const props = defineProps({
+  duration: { type: Number, required: true },
+  isRest: { type: Boolean }
+})
 const emit = defineEmits<{
-    (event: 'complete'): void,
+  (event: 'complete'): void,
 }>()
 
 const remainingTime = ref(props.duration)
@@ -52,14 +62,14 @@ const startTimer = () => {
       emit('complete')
     }
   }, 1000)
-};
+}
 
 const minus10 = () => {
   if (remainingTime.value >= 10 && totalDuration.value >= 10) {
     remainingTime.value -= 10
     totalDuration.value -= 10
   }
-};
+}
 
 const plus10 = () => {
   remainingTime.value += 10
@@ -69,7 +79,6 @@ const plus10 = () => {
 watch(progress, () => {
   const element = document.querySelector('.animated-time')
   if (!element) return
-  
   element.classList.add('pulse')
   setTimeout(() => {
     element.classList.remove('pulse')
@@ -85,26 +94,35 @@ onBeforeUnmount(() => {
 })
 </script>
 
-  
-  <style scoped>
-  @keyframes pulse {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.1); opacity: 0.7; }
-    100% { transform: scale(1); opacity: 1; }
+<style scoped>
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
   }
-  
-  .animated-time.pulse {
-    animation: pulse 0.5s ease-in-out;
+
+  50% {
+    transform: scale(1.1);
+    opacity: 0.7;
   }
-  
-  .progress-ring__background {
-    fill: none;
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
   }
-  
-  .progress-ring__progress {
-    fill: none;
-    stroke: #34d399;
-    transition: stroke-dashoffset 0.5s ease-out;
-  }
-  </style>
-  
+}
+
+.animated-time.pulse {
+  animation: pulse 0.5s ease-in-out;
+}
+
+.progress-ring__background {
+  fill: none;
+}
+
+.progress-ring__progress {
+  fill: none;
+  stroke: #34d399;
+  transition: stroke-dashoffset 0.5s ease-out;
+}
+</style>
