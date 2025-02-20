@@ -41,26 +41,8 @@ const emit = defineEmits<{
 const toast = useToast();
 
 const handleDeletion = async (id: string) => {
-  try {
-    const fullTraining: Training | null = await trainingDataStorage.getItem(id);
-    await removeTrainingFromExercisesUsedIn(fullTraining!.exercises, id);
-    await trainingDataStorage.removeItem(id);
-    emit('reloadTrainings');
-    toast.add({
-      severity: 'success',
-      summary: 'Успех!',
-      detail: "Успешно удалено",
-      life: 1500,
-    });
-  } catch (err) {
-    const errorMessage = err instanceof Error ? err.message : String(err);
-    toast.add({
-      severity: 'error',
-      summary: 'Произошла ошибка',
-      detail: errorMessage,
-      life: 3500,
-    });
-  }
+  await deleteTraining(id);
+  emit('reloadTrainings');
 }
 </script>
 
