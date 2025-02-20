@@ -4,9 +4,10 @@ import { z } from 'zod';
 import type FirstFormSubmitArgs from '~/types/createUser/FirstFormSubmitArgs';
 import type SecondFormSubmitArgs from '~/types/createUser/SecondFormSubmitArgs';
 import userDataStorage from '~/storage/userData';
-import type { FirstFormValues, SecondFormValues, UserData } from '~/types/createUser/UserDataTypes';
+import type { FirstFormValues, SecondFormValues } from '~/types/createUser/UserDataTypes';
 import { useToast } from 'primevue/usetoast';
 import Loading from '~/components/states/Loading.vue';
+import setUserHealhData from '~/utils/setUserHealthData';
 
 definePageMeta({
     layout: false
@@ -63,6 +64,7 @@ const finishForm = async (data: SecondFormSubmitArgs): Promise<void> => {
             height: secondFormValues.value.height,
             sportActivity: secondFormValues.value.sportActivity,
         });
+        await setUserHealhData(secondFormValues.value.weight, secondFormValues.value.height)
         localStorage.setItem('isVisited', 'true');
         navigateTo('/');
     } catch (err: unknown) {
