@@ -20,8 +20,9 @@
                 </div>
             </template>
             <template #footer>
-                <div v-if="exercise?.metric !== 'Время (сек)' && !rest " class="flex gap-4 mt-1">
-                    <Button label="Выполнено" severity="secondary" icon="pi pi-check" class="w-full" @click="handleCompletion" />
+                <div v-if="exercise?.metric !== 'Время (сек)' && !rest " class="flex gap-4 mt-4">
+                    <Button label="Пропустить" severity="secondary" icon="pi pi-times" class="w-full" @click="handleCompletion" />
+                    <Button label="Выполнено" severity="primary" icon="pi pi-check" class="w-full" @click="handleCompletion" />
                 </div>
             </template>
         </Card>
