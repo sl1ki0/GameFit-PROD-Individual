@@ -25,10 +25,8 @@
 </template>
 
 <script setup lang="ts">
-import trainingDataStorage from '~/storage/trainingData';
 import type Training from '~/types/trainings/TrainingType';
 import { useToast } from 'primevue';
-import { removeTrainingFromExercisesUsedIn } from '#imports';
 
 const props = defineProps<{
   training: Training;
