@@ -62,6 +62,8 @@ const finishForm = async (data: SecondFormSubmitArgs): Promise<void> => {
             height: secondFormValues.value.height,
             sportActivity: secondFormValues.value.sportActivity,
         });
+        localStorage.setItem('isVisited', 'true');
+        navigateTo('/');
     } catch (err: unknown) {
         const errorMessage = err instanceof Error ? err.message : String(err);
         toast.add({
@@ -72,8 +74,6 @@ const finishForm = async (data: SecondFormSubmitArgs): Promise<void> => {
         });
     } finally {
         isLoading.value = false;
-        localStorage.setItem('isVisited', 'true');
-        navigateTo('/');
     }
 };
 
