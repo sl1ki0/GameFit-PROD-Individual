@@ -72,7 +72,7 @@ const handleSubmit = async (data: ExerciseFromSubmitArgs) => {
 
                     <div class="flex flex-col gap-1 w-2/3">
                         <label for="name" class="mb-2 font-semibold text-lg">Укажите название</label>
-                        <InputText v-model="initialValues.name" id="name" name="name" type="text" placeholder="Название"
+                        <InputText :maxlength="35" v-model="initialValues.name" id="name" name="name" type="text" placeholder="Название"
                             class="w-full" />
                         <Message v-if="$form.name?.invalid" severity="error" size="small" variant="simple">
                             {{ $form.name?.error?.message }}
