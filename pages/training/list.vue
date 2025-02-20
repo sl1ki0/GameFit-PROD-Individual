@@ -40,14 +40,6 @@ const searchQuery = ref<string>('');
 const selectedMuscleGroup = ref<{ name: string } | null>(null);
 const selectedEquipment = ref<{ name: string } | null>(null);
 
-const deleteTraining = (training: Training) => {
-  return
-};
-
-const passTraining = (training: Training) => {
-  return
-};
-
 const filterTrainings = () => {
   return trainings.value.filter(training => {
     const nameMatch = !searchQuery.value || training.name.toLowerCase().includes(searchQuery.value.toLowerCase());
