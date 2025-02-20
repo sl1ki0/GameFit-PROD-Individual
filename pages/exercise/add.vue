@@ -10,6 +10,7 @@ import { nanoid } from 'nanoid';
 import type Exercise from '~/types/trainings/ExerciseType';
 import { useToast } from '#imports';
 import Loading from '~/components/states/Loading.vue';
+import {transformLinksToArray} from '#imports';
 
 const toast = useToast();
 
@@ -32,6 +33,8 @@ const handleSubmit = async (data: ExerciseFromSubmitArgs) => {
     if (!data.valid) return;
 
     isLoading.value = true
+
+    const transformedLinks = transformLinksToArray(data.values.media);
     const finalData: Exercise = {
         id: nanoid(),
         name: data.values.name,
@@ -39,7 +42,7 @@ const handleSubmit = async (data: ExerciseFromSubmitArgs) => {
         muscleGroup: data.values.muscleGroup,
         items: data.values.items,
         instruction: data.values.instruction,
-        media: data.values.media,
+        media: transformedLinks,
         usedIn: [],
         metric: data.values.metric
     }

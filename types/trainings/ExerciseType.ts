@@ -5,7 +5,7 @@ export default interface Exercise {
     muscleGroup: "Грудь" | "Руки" | "Спина" | "Ноги" | "Общее";
     items: string[];
     instruction: string;
-    media?: string[];
+    media: string[];
     usedIn: string[] | null;
     metric: "Вес (кг)" | "Число повторений" | "Время (сек)" | "Дистанция (м)";
 }

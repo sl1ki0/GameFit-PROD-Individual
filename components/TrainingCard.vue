@@ -18,7 +18,7 @@
     <template #footer>
       <div class="flex gap-4 mt-1">
         <Button label="Удалить" severity="danger" outlined class="w-full" @click="handleDeletion(training.id)" />
-        <Button label="Начать" class="w-full" />
+        <Button label="Начать" class="w-full" @click="passTraining(training.id)" />
       </div>
     </template>
   </Card>
@@ -35,6 +35,10 @@ const props = defineProps<{
 const emit = defineEmits<{
   (event: 'reloadTrainings'): void
 }>();
+
+const passTraining = (id: string) => {
+  return navigateTo(`/training/pass/${id}`)
+}
 
 const toast = useToast();
 

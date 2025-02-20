@@ -42,7 +42,6 @@ onMounted(async () => {
 
     try {
         const { target, upperLimit } = await calculateExercise(props.exercise.exercise);
-        console.log(target, upperLimit)
         exTarget.value = target;
         exUpperLimit.value =  upperLimit;
     } catch (err) {
