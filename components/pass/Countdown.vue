@@ -1,5 +1,5 @@
 <template>
-    <div class="relative flex flex-col justify-center items-center shadow-lg p-6 rounded-lg">
+    <div class="relative flex flex-col justify-center items-center p-6">
       <svg class="progress-ring" width="160" height="160">
         <circle class="progress-ring__background" cx="80" cy="80" r="70" stroke-width="10" />
         <circle class="progress-ring__progress" cx="80" cy="80" r="70" stroke-width="10" stroke-linecap="round" :stroke-dasharray="circumference" :stroke-dashoffset="progressOffset"/>
@@ -80,12 +80,11 @@ const emit = defineEmits<{
   
   .progress-ring__background {
     fill: none;
-    stroke: #e0e0e0;
   }
   
   .progress-ring__progress {
     fill: none;
-    stroke: #4f46e5;
+    stroke: #34d399;
     transition: stroke-dashoffset 0.5s ease-out;
   }
   </style>
