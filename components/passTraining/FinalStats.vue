@@ -52,28 +52,21 @@
             <span class="font-medium">{{ stat.metric }}</span>
             <span class="font-bold text-primary text-2xl">{{ stat.count }}</span>
           </div>
-          <ProgressBar 
-            :value="100" 
-            :pt="{
-              root: { class: 'h-2' },
-              value: { class: 'animate-progress bg-primary' }
-            }"
-          />
         </div>
       </div>
 
       <template #footer>
-        <div class="flex justify-center gap-4">
+        <div class="flex w-full h-full justify-between gap-4">
           <Button 
-            label="Try Again" 
+            label="Заново" 
             icon="pi pi-refresh"
             severity="secondary"
             @click="router.go(0)"
           />
           <Button 
-            label="Back to Trainings" 
+            label="Завершить" 
             icon="pi pi-home"
-            @click="router.push('/training')"
+            @click="router.push('/training/list')"
           />
         </div>
       </template>
@@ -83,6 +76,7 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
+import { formatTime } from '#imports';
 
 const router = useRouter();
 
@@ -94,13 +88,6 @@ const props = defineProps<{
 const showCounter = ref(true);
 const showDialog = ref(false);
 const counterValue = ref(0);
-
-const formatTime = (seconds: number): string => {
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-};
-
 onMounted(() => {
   let current = 0;
   const interval = setInterval(() => {

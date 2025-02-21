@@ -23,6 +23,8 @@
 </template>
 
 <script setup lang="ts">
+import { formatTime } from '#imports';
+
 const props = defineProps({
   duration: { type: Number, required: true },
   isRest: { type: Boolean }
@@ -43,11 +45,8 @@ const progressOffset = computed(() => {
   return circumference - (progress.value / totalDuration.value) * circumference
 })
 
-const formattedTime = computed(() => {
-  const timeInSeconds = Math.max(0, Math.floor(remainingTime.value))
-  const minutes = Math.floor(timeInSeconds / 60).toString().padStart(2, '0')
-  const seconds = (timeInSeconds % 60).toString().padStart(2, '0')
-  return `${minutes}:${seconds}`
+const formattedTime = computed((): string => {
+  return formatTime(remainingTime.value);
 })
 
 const startTimer = () => {
