@@ -14,3 +14,11 @@ export async function getUserPoints(): Promise<number> {
         return 0;
     }
 }
+
+export async function updateUserPoints(newPoints: number): Promise<void> {
+    try {
+        await userDataStorage.setItem('points', newPoints);
+    } catch (error) {
+        console.error('Ошибка при обновлении points:', error);
+    }
+}

@@ -63,6 +63,8 @@
 import { useRouter } from 'vue-router';
 import { formatTime } from '#imports';
 import confetti from 'canvas-confetti';
+import userDataStorage from '~/storage/userData';
+import { getUserPoints, updateUserPoints } from '~/utils/achievements/userPointsUtil';
 
 const router = useRouter();
 
@@ -77,6 +79,16 @@ const totalRoundedSum = computed(() => {
   return Math.ceil(props.stats.reduce((sum, stat) => sum + stat.count, 0) * 0.5);
 });
 
+async function updatePoints() {
+  try {
+    const currentPoints = (await getUserPoints()) || 0;
+    const newPoints = currentPoints + totalRoundedSum.value;
+    await updateUserPoints(newPoints);
+  } catch (error) {
+    console.error('Ошибка при обновлении очков:', error);
+  }
+}
+
 function launchConfetti() {
   confetti({
     particleCount: 100,
@@ -86,11 +98,12 @@ function launchConfetti() {
   });
 }
 
-onMounted(() => {
+onMounted(async () => {
+  await updatePoints();
   setTimeout(() => {
     showDialog.value = true;
     launchConfetti();
-  }, 400); // Плавное появление диалога через 400 миллисекунд
+  }, 400);
 });
 </script>
 
