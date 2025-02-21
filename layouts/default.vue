@@ -47,7 +47,14 @@ const items = ref([
         command: () => {
             return navigateTo('/exercise/list')
         }
-    }
+    },
+    {
+        label: 'Профиль',
+        icon: 'pi pi-user',
+        command: () => {
+            return navigateTo('/profile')
+        }
+    },
 ]);
 
 onMounted(async () => {
