@@ -8,6 +8,7 @@ import type { FirstFormValues, SecondFormValues } from '~/types/createUser/UserD
 import { useToast } from 'primevue/usetoast';
 import Loading from '~/components/states/Loading.vue';
 import setUserHealhData from '~/utils/setUserHealthData';
+import Genarate from '~/components/ai/Genarate.vue';
 
 definePageMeta({
     layout: false
@@ -51,7 +52,8 @@ const nextStep = (data: FirstFormSubmitArgs, activateCallback: (step: string) =>
 };
 
 const toast = useToast();
-const isLoading = ref(false)
+const isLoading = ref(false);
+const startGeneration = ref(false)
 
 const finishForm = async (data: SecondFormSubmitArgs): Promise<void> => {
     if (!data.valid) return;
@@ -69,7 +71,7 @@ const finishForm = async (data: SecondFormSubmitArgs): Promise<void> => {
         });
         await setUserHealhData(secondFormValues.value.weight, secondFormValues.value.height)
         localStorage.setItem('isVisited', 'true');
-        navigateTo('/');
+        startGeneration.value = true
     } catch (err: unknown) {
         const errorMessage = err instanceof Error ? err.message : String(err);
         toast.add({
@@ -87,7 +89,8 @@ const finishForm = async (data: SecondFormSubmitArgs): Promise<void> => {
 
 <template>
     <Toast />
-    <div class="card flex justify-center">
+    <Genarate v-if="startGeneration" :redirect-page="'/'" :prompt="`${firstFormValues.gender}`" />
+    <div v-if="!startGeneration" class="card flex justify-center">
         <Stepper value="1" linear class="basis-[50rem]">
             <StepList>
                 <Step value="1">Основное</Step>

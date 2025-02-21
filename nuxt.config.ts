@@ -4,7 +4,7 @@ import Aura from '@primevue/themes/aura';
 export default defineNuxtConfig({
   ssr: false,
   compatibilityDate: '2025-02-19',
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   nitro: {
     output: {
       publicDir: 'public'

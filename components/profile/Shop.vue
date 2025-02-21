@@ -1,16 +1,28 @@
 <script setup lang="ts">
 import { getUserPoints } from '~/utils/achievements/userPointsUtil';
 import { SHOP_ITEMS } from '~/constants/shopItems';
+import Genarate from '../ai/Genarate.vue';
 
 const points = ref<number>(0)
 
 onMounted(async () => {
     points.value = await getUserPoints();
 });
+
+const startGeneration = ref(false);
+const textPrompt = ref('')
+
+const handleBuy = (description: string) => {
+    startGeneration.value = true;
+    textPrompt.value = description
+}
 </script>
 
 <template>
-    <div class="mb-4">
+    <Genarate v-if="startGeneration" :prompt="`in ${textPrompt}`" :redirect-page="'/profile'" :reload="'true'"  />
+
+    <div v-if="!startGeneration">
+        <div class="mb-4">
         <Message severity="info" class="inline-block">
             <span class="font-bold">Ваши очки: {{ points }} 💎</span>
         </Message>
@@ -40,10 +52,12 @@ onMounted(async () => {
                         severity="primary"
                         rounded
                         class="w-full"
+                        @click="handleBuy(item.description)"
                     />
                 </div>
             </template>
         </Card>
+    </div>
     </div>
 </template>
 

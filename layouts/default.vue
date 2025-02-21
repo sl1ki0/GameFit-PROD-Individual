@@ -16,9 +16,9 @@
                     </a>
                 </template>
                 <template #end>
-                    <div class="flex items-center gap-2">
-                        <Avatar style="cursor: pointer;" @click="navigateTo('/profile')"
-                            image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" shape="circle" />
+                    <div class="flex items-center gap-4">
+                        <Avatar v-if="url" style="cursor: pointer;" @click="navigateTo('/profile')"
+                            :image="url" shape="circle" />
                     </div>
                 </template>
             </Menubar>
@@ -28,14 +28,12 @@
 </template>
 
 <script setup>
+import userDataStorage from '~/storage/userData';
+
+const url = ref('');
+const points = ref(0)
+
 const items = ref([
-    {
-        label: 'Расписание',
-        icon: 'pi pi-calendar',
-        command: () => {
-            return navigateTo('/')
-        }
-    },
     {
         label: 'Тренировки',
         icon: 'pi pi-wave-pulse',
@@ -51,4 +49,12 @@ const items = ref([
         }
     }
 ]);
+
+onMounted(async () => {
+    try {
+        url.value = await userDataStorage.getItem('photo');
+    } catch (error) {
+        console.error(String(error))
+    }
+})
 </script>

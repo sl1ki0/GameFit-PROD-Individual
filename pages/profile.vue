@@ -32,10 +32,13 @@ function transformProfileData(profile: any) {
     };
 };
 
+const imageUrl = ref<string | null>('')
+
 async function initializeForm() {
     isLoading.value = true;
     try {
         const profile = await userDataStorage.getItem('user');
+        imageUrl.value = await userDataStorage.getItem('photo');
         if (profile) {
             initialValues.value = transformProfileData(profile);
             formKey.value++;
@@ -59,7 +62,7 @@ onMounted(initializeForm);
 const userInputsSchema = z.object({
     username: z.string().min(1, { message: 'Обязательно заполните имя' }),
     gender: z.string().min(1, { message: 'Обязательно выберите пол' }),
-    age: z.number().min(5, {message: "Вы должны быть хотя-бы старше 5"}).max(180, {message: 'Введите настоящий возраст'}),
+    age: z.number().min(5, { message: "Вы должны быть хотя-бы старше 5" }).max(180, { message: 'Введите настоящий возраст' }),
     weight: z.coerce.number().min(1, { message: 'Обязательно заполните вес' }),
     height: z.coerce.number().min(1, { message: 'Обязательно заполните рост' }),
     sportActivity: z.coerce.number().min(1, { message: 'Обязательно' }),
@@ -82,7 +85,7 @@ const handleSubmit = async (data: any) => {
             sportActivity: data.values.sportActivity,
         });
         await setUserHealhData(data.values.weight, data.values.height)
-        
+
         toast.add({
             severity: 'success',
             summary: 'Успешно',
@@ -115,8 +118,8 @@ const handleSubmit = async (data: any) => {
 
                     <div class="flex flex-col items-center shadow p-4 rounded-lg">
                         <div class="relative mb-4">
-                            <img :src="'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'"
-                                class="rounded-full w-48 h-48 object-cover" alt="Фото профиля" />
+                            <img v-if="imageUrl" :src="imageUrl" class="rounded-full w-[512px] h-[512px] object-cover"
+                                alt="Фото профиля" />
                         </div>
                         <h2 class="mb-2 font-semibold text-xl">{{ initialValues.username }}</h2>
                     </div>
