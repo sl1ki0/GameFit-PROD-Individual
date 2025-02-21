@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { string, z, type TypeOf } from 'zod';
 import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { DIFFICULTIES, METRICS, MUSCLEGROUPS, SPORT_EQUIPMENT } from '~/constants/exerciseConstants';
 import formSchema from '~/formSchemas/addExerciseSchema';
 import type ExerciseFromSubmitArgs from '~/types/trainings/ExerciseFormSubmitArgs';
 import exerciseDataStorage from '~/storage/exerciseData';
-import { nanoid } from 'nanoid';
 import type Exercise from '~/types/trainings/ExerciseType';
 import { useToast } from '#imports';
 import Loading from '~/components/states/Loading.vue';
@@ -28,44 +26,49 @@ const initialValues = ref<any>({
 });
 
 const formKey = ref(0);
-const formRef = ref();
 let used: string[] | null = null
 
-onMounted(async () => {
+
+function transformExerciseData(ex: any) {
+    return {
+        ...ex,
+        difficulty: DIFFICULTIES.find(d => d.value === ex.difficulty),
+        muscleGroup: MUSCLEGROUPS.find(m => m.value === ex.muscleGroup),
+        items: ex.items.map((itemValue: string) =>
+            SPORT_EQUIPMENT.find(item => item.value === itemValue)
+        ),
+        media: ex.media.join(','),
+        metric: METRICS.find(m => m.value === ex.metric),
+    };
+}
+
+function handleError(err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    toast.add({
+        severity: 'error',
+        summary: 'Произошла ошибка',
+        detail: errorMessage,
+        life: 3500,
+    });
+}
+
+async function initializeForm() {
     if (!route.params.id) return;
 
     const ex = await getExerciseByKey(route.params.id as string);
 
     if (ex) {
         used = ex.usedIn;
-        const transformedValues = {
-            ...ex,
-            difficulty: DIFFICULTIES.find(d => d.value === ex.difficulty),
-            muscleGroup: MUSCLEGROUPS.find(m => m.value === ex.muscleGroup),
-            items: ex.items.map(itemValue =>
-                SPORT_EQUIPMENT.find(item => item.value === itemValue)
-            ),
-            media: ex.media.join(','),
-            metric: METRICS.find(m => m.value === ex.metric),
-        };
-        initialValues.value = transformedValues;
+        initialValues.value = transformExerciseData(ex);
         formKey.value++;
     }
-});
+}
 
-const resolver = zodResolver(formSchema);
-const isLoading = ref<boolean>(false);
 
-const handleSubmit = async (data: ExerciseFromSubmitArgs) => {
-    if (!data.valid) {
-        return;
-    }
-
-    isLoading.value = true;
-
+function prepareFinalData(data: ExerciseFromSubmitArgs): Exercise {
     const transformedLinks = transformLinksToArray(data.values.media);
 
-    const finalData: Exercise = {
+    return {
         id: route.params.id as string,
         name: data.values.name,
         difficulty: data.values.difficulty,
@@ -76,22 +79,30 @@ const handleSubmit = async (data: ExerciseFromSubmitArgs) => {
         usedIn: used || [],
         metric: data.values.metric,
     };
+}
+
+
+const handleSubmit = async (data: ExerciseFromSubmitArgs) => {
+    if (!data.valid) return;
+
+    isLoading.value = true;
+
+    const finalData = prepareFinalData(data);
 
     try {
         await exerciseDataStorage.setItem(finalData.id, finalData);
         navigateTo('/exercise/list');
     } catch (err: unknown) {
-        const errorMessage = err instanceof Error ? err.message : String(err);
-        toast.add({
-            severity: 'error',
-            summary: 'Произошла ошибка',
-            detail: errorMessage,
-            life: 3500,
-        });
+        handleError(err);
     } finally {
         isLoading.value = false;
     }
 };
+
+onMounted(initializeForm);
+
+const resolver = zodResolver(formSchema);
+const isLoading = ref<boolean>(false);
 </script>
 <template>
     <div class="flex justify-center items-center w-full min-h-[calc(100vh-58px)]">

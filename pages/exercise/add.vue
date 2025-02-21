@@ -29,34 +29,43 @@ const resolver = zodResolver(formSchema);
 
 const isLoading = ref<boolean>(false);
 
-const handleSubmit = async (data: ExerciseFromSubmitArgs) => {
-    if (!data.valid) return;
 
-    isLoading.value = true
-
-    const transformedLinks = transformLinksToArray(data.values.media);
-    const finalData: Exercise = {
+function createFinalExerciseData(data: ExerciseFromSubmitArgs): Exercise {
+    return {
         id: nanoid(),
         name: data.values.name,
         difficulty: data.values.difficulty,
         muscleGroup: data.values.muscleGroup,
         items: data.values.items,
         instruction: data.values.instruction,
-        media: transformedLinks,
+        media: transformLinksToArray(data.values.media),
         usedIn: [],
         metric: data.values.metric
-    }
+    };
+}
+
+function handleError(err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    toast.add({
+        severity: 'error',
+        summary: 'Произошла ошибка',
+        detail: errorMessage,
+        life: 3500,
+    });
+}
+
+const handleSubmit = async (data: ExerciseFromSubmitArgs) => {
+    if (!data.valid) return;
+
+    isLoading.value = true;
+
+    const finalData = createFinalExerciseData(data);
+
     try {
         await exerciseDataStorage.setItem(finalData.id, finalData);
-        navigateTo('/exercise/list')
+        navigateTo('/exercise/list');
     } catch (err: unknown) {
-        const errorMessage = err instanceof Error ? err.message : String(err);
-        toast.add({
-            severity: 'error',
-            summary: 'Произошла ошибка',
-            detail: errorMessage,
-            life: 3500,
-        });
+        handleError(err);
     } finally {
         isLoading.value = false;
     }

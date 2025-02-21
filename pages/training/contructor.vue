@@ -195,39 +195,45 @@ const savePlan = () => {
   saveDialog.value = true
 };
 
-const isLoading = ref<boolean>(false)
+const isLoading = ref<boolean>(false);
+
+function handleError(err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    toast.add({
+        severity: 'error',
+        summary: 'Произошла ошибка',
+        detail: errorMessage,
+        life: 3500,
+    });
+};
+
+function createFinalTraining(): Training {
+    const { transformedArray, mostCommonMuscleGroup, mostCommonDifficulty, uniqueItems } = transformPlanExercises(planExercises.value);
+
+    return {
+        id: nanoid(),
+        name: saveDialogValues.value.name,
+        description: saveDialogValues.value.description,
+        muscleGroup: mostCommonMuscleGroup,
+        difficulty: mostCommonDifficulty,
+        exercises: transformedArray,
+        equipment: uniqueItems
+    };
+}
+
 
 const onSaveDialogSubmit = async (data: { valid: boolean }) => {
   if (!data.valid) {
     return;
   }
-
   isLoading.value = true;
-
-  const { transformedArray, mostCommonMuscleGroup, mostCommonDifficulty, uniqueItems } = transformPlanExercises(planExercises.value);
-
-  const finalTraining: Training = {
-    id: nanoid(),
-    name: saveDialogValues.value.name,
-    description: saveDialogValues.value.description,
-    muscleGroup: mostCommonMuscleGroup,
-    difficulty: mostCommonDifficulty,
-    exercises: transformedArray,
-    equipment: uniqueItems
-  };
-
+  const finalTraining: Training = createFinalTraining();
   try {
     await trainingDataStorage.setItem<Training>(finalTraining.id, finalTraining);
     await updateExercisesUsedIn(planExercises.value, finalTraining.id);
     navigateTo('/training/list');
   } catch (err) {
-    const errorMessage = err instanceof Error ? err.message : String(err);
-    toast.add({
-      severity: 'error',
-      summary: 'Произошла ошибка',
-      detail: errorMessage,
-      life: 3500,
-    });
+    handleError(err);
 
     await trainingDataStorage.removeItem(finalTraining.id);
   } finally {
