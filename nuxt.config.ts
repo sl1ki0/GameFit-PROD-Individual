@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import Aura from '@primevue/themes/aura';
+import { APP_NAME } from './constants/branding';
 
 export default defineNuxtConfig({
   ssr: false,
@@ -11,7 +12,13 @@ export default defineNuxtConfig({
     }
   },
   app: {
-    baseURL: '/'
+    baseURL: '/',
+    head: {
+      title: APP_NAME,
+      htmlAttrs: {
+        lang: 'ru'
+      }
+    }
   },
   modules: ['nuxt3-localforage', '@nuxtjs/tailwindcss', '@primevue/nuxt-module'],
   vite: {
