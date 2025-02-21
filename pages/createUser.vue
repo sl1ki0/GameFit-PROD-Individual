@@ -69,7 +69,8 @@ const finishForm = async (data: SecondFormSubmitArgs): Promise<void> => {
             height: secondFormValues.value.height,
             sportActivity: secondFormValues.value.sportActivity,
         });
-        await setUserHealhData(secondFormValues.value.weight, secondFormValues.value.height)
+        await setUserHealhData(secondFormValues.value.weight, secondFormValues.value.height);
+        await initializeFirstUseMocks();
         localStorage.setItem('isVisited', 'true');
         startGeneration.value = true
     } catch (err: unknown) {
