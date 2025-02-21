@@ -125,7 +125,7 @@ const isLoading = ref<boolean>(false);
 
 
                     <div class="flex flex-col gap-1 w-2/3">
-                        <label for="difficulty" class="mb-2 font-semibold text-lg">Выберите сложность</label>
+                        <p class="mb-2 font-semibold text-lg">Выберите сложность</p>
                         <Select id="difficulty" name="difficulty" :options="DIFFICULTIES" optionLabel="name"
                             placeholder="Сложность" class="w-full" />
                         <Message v-if="$form.difficulty?.invalid" severity="error" size="small" variant="simple">
@@ -135,7 +135,7 @@ const isLoading = ref<boolean>(false);
 
 
                     <div class="flex flex-col gap-1 w-2/3">
-                        <label for="muscleGroup" class="mb-2 font-semibold text-lg">Выберите группу мышц</label>
+                        <p class="mb-2 font-semibold text-lg">Выберите группу мышц</p>
                         <Select id="muscleGroup" name="muscleGroup" :options="MUSCLEGROUPS" optionLabel="name"
                             placeholder="Часть тела" class="w-full" />
                         <Message v-if="$form.muscleGroup?.invalid" severity="error" size="small" variant="simple">
@@ -145,7 +145,7 @@ const isLoading = ref<boolean>(false);
 
 
                     <div class="flex flex-col gap-1 w-2/3">
-                        <label for="items" class="mb-2 font-semibold text-lg">Выберите инвентарь</label>
+                        <p class="mb-2 font-semibold text-lg">Выберите инвентарь</p>
                         <MultiSelect id="items" name="items" :options="SPORT_EQUIPMENT" display="chip"
                             optionLabel="name" filter placeholder="Инвентарь" :maxSelectedLabels="5" :show-clear="true"
                             class="w-full" />
@@ -156,7 +156,7 @@ const isLoading = ref<boolean>(false);
 
 
                     <div class="flex flex-col gap-1 w-2/3">
-                        <label for="metric" class="mb-2 font-semibold text-lg">Выберите единицу измерения</label>
+                        <p class="mb-2 font-semibold text-lg">Выберите единицу измерения</p>
                         <Select id="metric" name="metric" :options="METRICS" optionLabel="name"
                             placeholder="Единица измерения" class="w-full" />
                         <Message v-if="$form.metrics?.invalid" severity="error" size="small" variant="simple">
@@ -166,8 +166,8 @@ const isLoading = ref<boolean>(false);
 
 
                     <div class="flex flex-col gap-1 w-2/3">
-                        <label for="instruction" class="mb-2 font-semibold text-lg">Введите описание
-                            (инструкцию)</label>
+                        <p class="mb-2 font-semibold text-lg">Введите описание
+                            (инструкцию)</p>
                         <Editor v-model:model-value="initialValues.instruction" id="instruction" name="instruction"
                             editorStyle="height: 320px">
                             <template v-slot:toolbar>
