@@ -61,7 +61,7 @@ const handleDeletion = (id: string, usedIn: Array<string> | null) => {
 };
 
 const openExercisePage = (event: any): ReturnType<typeof navigateTo> => {
-  return navigateTo(`/exercise/${event.data.id}`);
+  return navigateTo(`/exercise/edit/${event.data.id}`);
 };
 </script>
 
