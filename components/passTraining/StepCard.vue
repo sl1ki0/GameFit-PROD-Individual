@@ -11,18 +11,21 @@
                 <div v-if="!rest" class="flex flex-col items-center gap-4 w-full h-full">
                     <h2 class="font-semibold text-xl">{{ exercise?.name }}</h2>
                     <div v-html="exercise?.instruction"></div>
-                    <Countdown v-if="exercise?.metric === 'Время (сек)' " :duration="count" @complete="handleCompletion"></Countdown>
+                    <Countdown v-if="exercise?.metric === 'Время (сек)' " :duration="count" @complete="handleCompletion(true)"></Countdown>
                     <p v-else>{{ actionText }}</p>
                 </div>
                 <div v-else class="flex flex-col items-center gap-4 w-full h-full">
                     <h2 class="font-semibold text-xl">Отдых</h2>
-                    <Countdown :duration="count" :isRest="rest" @complete="handleEndRest"></Countdown>
+                    <Countdown :duration="30" :isRest="rest" @complete="handleEndRest"></Countdown>
                 </div>
             </template>
             <template #footer>
                 <div v-if="exercise?.metric !== 'Время (сек)' && !rest " class="flex gap-4 mt-4">
-                    <Button label="Пропустить" severity="secondary" icon="pi pi-times" class="w-full" @click="handleCompletion" />
-                    <Button label="Выполнено" severity="primary" icon="pi pi-check" class="w-full" @click="handleCompletion" />
+                    <Button label="Пропустить" severity="secondary" icon="pi pi-times" class="w-full" @click="handleCompletion(false)" />
+                    <Button label="Выполнено" severity="primary" icon="pi pi-check" class="w-full" @click="handleCompletion(true)" />
+                </div>
+                <div v-if="exercise?.metric === 'Время (сек)' && !rest " class="flex gap-4 mt-4">
+                    <Button label="Пропустить" severity="secondary" icon="pi pi-times" class="w-full" @click="handleCompletion(false)" />
                 </div>
             </template>
         </Card>
@@ -33,6 +36,7 @@
 import type Exercise from '~/types/trainings/ExerciseType';
 import { getExerciseByKey } from '#imports';
 import Countdown from './Countdown.vue';
+import type CompletionData from '~/types/trainings/CompletionData';
 
 const props = defineProps<{
     exId: string;
@@ -41,10 +45,11 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-    (event: 'complete'): void,
+    (event: 'complete', payload: CompletionData): void,
 }>();
 
-const exercise = ref<Exercise | null>(null)
+const exercise = ref<Exercise | null>(null);
+const completed = ref<boolean>(false)
 
 const initExercise = async () => {
     exercise.value = await getExerciseByKey(props.exId);
@@ -74,14 +79,18 @@ const actionText = computed(() => {
 
 const rest = ref(false);
 
-const handleCompletion = () => {
+const handleCompletion = (isCompleted: boolean) => {
     rest.value = true;
-    
+    completed.value = isCompleted;
 }
 
 const handleEndRest = () => {
     rest.value = false;
-    emit('complete')
+    emit('complete', {
+        isCompleted: completed.value,
+        count: props.count,
+        metric: exercise.value?.metric ?? ""
+    })
 }
 </script>
 

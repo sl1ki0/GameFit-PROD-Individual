@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col justify-center items-center p-6">
-    <!-- Контейнер для таймера с фиксированными размерами -->
+    <!-- Вдохновлено, источник: https://codepen.io/kirtivernekar/pen/PoJOMbb -->
     <div class="relative w-[160px] h-[160px]">
       <svg class="progress-ring" width="160" height="160">
         <circle class="progress-ring__background" cx="80" cy="80" r="70" stroke-width="10" />
@@ -8,7 +8,7 @@
           :stroke-dasharray="circumference" :stroke-dashoffset="progressOffset" />
       </svg>
 
-      <div class="absolute inset-0 flex justify-center items-center font-semibold text-2xl animated-time">
+      <div class="absolute inset-0 flex justify-center items-center font-semibold text-2xl animated-time" :class="{'pulse': isPulse}">
         {{ formattedTime }}
       </div>
     </div>
@@ -76,12 +76,12 @@ const plus10 = () => {
   totalDuration.value += 10
 }
 
+const isPulse = ref(false)
+
 watch(progress, () => {
-  const element = document.querySelector('.animated-time')
-  if (!element) return
-  element.classList.add('pulse')
+  isPulse.value = true
   setTimeout(() => {
-    element.classList.remove('pulse')
+    isPulse.value = false
   }, 500)
 })
 
