@@ -12,6 +12,7 @@
   "dependencies": {
     "@primevue/forms": "^4.2.5",
     "@primevue/themes": "^4.2.5",
+    "canvas-confetti": "^1.9.3",
     "gsap": "^3.12.7",
     "nanoid": "^5.1.0",
     "nuxt": "^3.15.4",
@@ -25,6 +26,7 @@
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^6.13.1",
     "@primevue/nuxt-module": "^4.2.5",
+    "@types/canvas-confetti": "^1.9.0",
     "nuxt3-localforage": "^0.1.2"
   }
 }
