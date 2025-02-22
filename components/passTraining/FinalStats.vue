@@ -2,7 +2,7 @@
   <div class="relative">
     <div
       class="fixed inset-0 bg-black/70 animate-fade-in"
-      style="z-index: 999;"
+      style="z-index: 100;"
     />
 
     
@@ -94,7 +94,7 @@ function launchConfetti() {
     particleCount: 100,
     spread: 70,
     origin: { y: 0.6 },
-    zIndex: 1000
+    zIndex: 200
   });
 }
 
