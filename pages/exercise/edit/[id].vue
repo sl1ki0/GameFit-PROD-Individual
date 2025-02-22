@@ -184,8 +184,8 @@ const isLoading = ref<boolean>(false);
                     </div>
 
                     <div class="flex flex-col gap-1 w-2/3">
-                        <label for="media" class="mb-2 font-semibold text-lg">Перечислите ссылки через запятую</label>
-                        <InputText id="media" name="media" type="text" placeholder="Перечислите через пробел"
+                        <label for="media" class="mb-2 font-semibold text-lg">Перечислите ссылки на фото через запятую</label>
+                        <InputText id="media" name="media" type="text" placeholder="Перечислите через запятую"
                             class="w-full" />
                         <Message v-if="$form.media?.invalid" severity="error" size="small" variant="simple">
                             {{ $form.media?.error?.message }}
